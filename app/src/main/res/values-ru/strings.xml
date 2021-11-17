@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Заметки</string>
+    <string name="note_title">Введите заголовок</string>
+    <string name="note_text">Введите текст</string>
+    <string name="menu_save">Сохранить</string>
+    <string name="note_saved">Заметка сохранена</string>
+</resources>
