@@ -4,4 +4,6 @@
     <string name="note_text">Enter the text</string>
     <string name="menu_save">Save</string>
     <string name="note_saved">Note saved</string>
+    <string name="note_save_failed">Note save failed</string>
+    <string name="note_empty">Note is empty, not saved</string>
 </resources>

@@ -7,13 +7,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.alexey.notes.R
 import com.alexey.notes.databinding.ActivityMainBinding
-import com.alexey.notes.model.MainModel
-import com.alexey.notes.presenter.MainPresenter
+import com.alexey.notes.model.NoteModel
+import com.alexey.notes.presenter.NotePresenter
 
-class MainActivity : AppCompatActivity() {
+class NoteActivity : AppCompatActivity(), NoteView {
+
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var presenter: MainPresenter
+    private lateinit var presenter: NotePresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,14 +24,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        val mainModel = MainModel()
-        presenter = MainPresenter(mainModel)
+        val mainModel = NoteModel()
+        presenter = NotePresenter(mainModel)
         presenter.attachView(this)
         presenter.viewIsReady()
-    }
-
-    fun showToast(resId: Int) {
-        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -39,9 +36,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.note_save) {
-            presenter.save()
+        if (item.itemId == R.id.note_save) with(binding) {
+            presenter.save(editTitle.text.toString(), editText.text.toString())
         }
         return true
+    }
+
+    override fun onSaveSuccessEvent() {
+        showToast(R.string.note_saved)
+    }
+
+    override fun onSaveFailedEvent() {
+        showToast(R.string.note_save_failed)
+    }
+
+    override fun onAttemptSaveEmptyContent() {
+        showToast(R.string.note_empty)
+    }
+
+    private fun showToast(resId: Int) {
+        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
 }

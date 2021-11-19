@@ -5,4 +5,6 @@
     <string name="note_text">Введите текст</string>
     <string name="menu_save">Сохранить</string>
     <string name="note_saved">Заметка сохранена</string>
+    <string name="note_empty">Заметка пуста, не сохранена</string>
+    <string name="note_save_failed">Не удалось сохранить заметку</string>
 </resources>
