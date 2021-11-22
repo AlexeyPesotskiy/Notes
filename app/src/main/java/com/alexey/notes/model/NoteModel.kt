@@ -1,8 +1,8 @@
 package com.alexey.notes.model
 
-class NoteModel {
+class NoteModel : Model {
 
-    fun saveNote(title: String, text: String): Boolean {
+    override fun saveNote(title: String, text: String): Boolean {
         return true
     }
 }

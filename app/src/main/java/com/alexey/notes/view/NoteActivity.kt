@@ -9,12 +9,13 @@ import com.alexey.notes.R
 import com.alexey.notes.databinding.ActivityMainBinding
 import com.alexey.notes.model.NoteModel
 import com.alexey.notes.presenter.NotePresenter
+import com.alexey.notes.presenter.Presenter
 
 class NoteActivity : AppCompatActivity(), NoteView {
 
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var presenter: NotePresenter
+    private lateinit var presenter: Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,6 @@ class NoteActivity : AppCompatActivity(), NoteView {
         val mainModel = NoteModel()
         presenter = NotePresenter(mainModel)
         presenter.attachView(this)
-        presenter.viewIsReady()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
