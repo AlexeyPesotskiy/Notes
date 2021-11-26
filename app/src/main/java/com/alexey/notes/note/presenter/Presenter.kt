@@ -7,4 +7,6 @@ interface Presenter {
     fun attachView(view: NoteView)
 
     fun save(title: String, text: String)
+    fun shareBtnClicked(title: String, text: String)
+    fun aboutBtnClicked()
 }
