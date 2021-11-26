@@ -1,4 +1,4 @@
-package com.alexey.notes.view
+package com.alexey.notes.note.view
 
 interface NoteView {
 

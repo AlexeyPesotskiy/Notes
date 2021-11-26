@@ -1,4 +1,4 @@
-package com.alexey.notes.view
+package com.alexey.notes.note.view
 
 import android.os.Bundle
 import android.view.Menu
@@ -6,20 +6,20 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.alexey.notes.R
-import com.alexey.notes.databinding.ActivityMainBinding
-import com.alexey.notes.model.NoteModel
-import com.alexey.notes.presenter.NotePresenter
-import com.alexey.notes.presenter.Presenter
+import com.alexey.notes.databinding.ActivityNoteBinding
+import com.alexey.notes.note.model.NoteModel
+import com.alexey.notes.note.presenter.NotePresenter
+import com.alexey.notes.note.presenter.Presenter
 
 class NoteActivity : AppCompatActivity(), NoteView {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityNoteBinding
 
     private lateinit var presenter: Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
         init()
     }

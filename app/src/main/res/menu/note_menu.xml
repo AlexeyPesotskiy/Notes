@@ -3,8 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/note_share"
+        android:icon="@drawable/ic_share_24"
+        android:title="@string/menu_share"
+        app:showAsAction="never|ifRoom" />
+
+    <item
         android:id="@+id/note_save"
         android:icon="@drawable/ic_save_24"
         android:title="@string/menu_save"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/about_app"
+        android:icon="@drawable/ic_about_24"
+        android:title="@string/about"
+        app:showAsAction="never" />
 </menu>

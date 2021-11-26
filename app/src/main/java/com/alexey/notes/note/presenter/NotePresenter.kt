@@ -1,7 +1,7 @@
-package com.alexey.notes.presenter
+package com.alexey.notes.note.presenter
 
-import com.alexey.notes.model.Model
-import com.alexey.notes.view.NoteView
+import com.alexey.notes.note.model.Model
+import com.alexey.notes.note.view.NoteView
 
 class NotePresenter(private var model: Model) : Presenter {
 

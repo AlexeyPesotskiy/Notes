@@ -1,4 +1,4 @@
-package com.alexey.notes.model
+package com.alexey.notes.note.model
 
 interface Model {
 
