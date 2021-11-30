@@ -30,8 +30,7 @@ class NoteActivity : AppCompatActivity(), NoteView {
     }
 
     private fun init() {
-        val mainModel = NoteModel()
-        presenter = NotePresenter(mainModel)
+        presenter = NotePresenter(NoteModel())
         presenter.attachView(this)
     }
 
