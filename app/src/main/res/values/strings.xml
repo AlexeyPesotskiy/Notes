@@ -8,6 +8,7 @@
     <string name="note_empty_save">Note is empty, not saved</string>
     <string name="note_empty_share">Note is empty, not shared</string>
     <string name="menu_share">Share</string>
+    <string name="add_note">Add note</string>
     <string name="about">About</string>
     <string name="app_version">Version 0.1</string>
 </resources>

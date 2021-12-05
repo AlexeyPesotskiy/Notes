@@ -13,10 +13,4 @@
         android:icon="@drawable/ic_save_24"
         android:title="@string/menu_save"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/about_app"
-        android:icon="@drawable/ic_about_24"
-        android:title="@string/about"
-        app:showAsAction="never" />
 </menu>

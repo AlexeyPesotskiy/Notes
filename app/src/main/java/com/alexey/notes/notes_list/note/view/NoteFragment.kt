@@ -1,42 +1,72 @@
-package com.alexey.notes.note.view
+package com.alexey.notes.notes_list.note.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.alexey.notes.R
-import com.alexey.notes.about.AboutActivity
-import com.alexey.notes.databinding.ActivityNoteBinding
-import com.alexey.notes.note.model.NoteModel
-import com.alexey.notes.note.presenter.NotePresenter
-import com.alexey.notes.note.presenter.Presenter
+import com.alexey.notes.databinding.FragmentNoteBinding
+import com.alexey.notes.notes_list.MainActivity
+import com.alexey.notes.notes_list.Note
+import com.alexey.notes.notes_list.note.model.NoteModel
+import com.alexey.notes.notes_list.note.presenter.NotePresenter
+import com.alexey.notes.notes_list.note.presenter.Presenter
 
-/**
- * Вью для [NotePresenter]
- */
-class NoteActivity : AppCompatActivity(), NoteView {
+class NoteFragment : Fragment(), NoteView {
 
-    private lateinit var binding: ActivityNoteBinding
+    companion object {
+        private const val ARG_NOTE = "args_note"
+        fun newInstance(note: Note) : NoteFragment {
+            val fragment = NoteFragment()
+            val bundle = Bundle()
+            bundle.putSerializable(ARG_NOTE, note)
+            fragment.arguments = bundle
+            return fragment
+        }
 
+    }
+
+    private lateinit var binding: FragmentNoteBinding
     private lateinit var presenter: Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNoteBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         init()
     }
 
     private fun init() {
         presenter = NotePresenter(NoteModel())
         presenter.attachView(this)
+
+        setHasOptionsMenu(true)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.note_menu, menu)
-        return true
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
+        FragmentNoteBinding.inflate(inflater).also {
+            binding = it
+        }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (arguments?.getSerializable(ARG_NOTE) as Note).apply {
+            presenter.init(mTitle, mText)
+        }
+    }
+
+    override fun fillLayout(title: String, text: String) {
+        binding.editTitle.setText(title)
+        binding.editText.setText(text)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.note_menu, menu)
     }
 
     /**
@@ -47,13 +77,17 @@ class NoteActivity : AppCompatActivity(), NoteView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val title = binding.editTitle.text.toString()
         val text = binding.editText.text.toString()
-
         when (item.itemId) {
+            android.R.id.home -> presenter.backBtnClicked()
             R.id.note_share -> presenter.shareBtnClicked(title, text)
             R.id.note_save -> presenter.save(title, text)
-            R.id.about_app -> presenter.aboutBtnClicked()
         }
         return true
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     /**
@@ -85,12 +119,19 @@ class NoteActivity : AppCompatActivity(), NoteView {
     }
 
     /**
+     * Нажатие на кнопку назад
+     */
+    override fun onBackEvent() {
+        activity?.supportFragmentManager?.popBackStack()
+    }
+
+    /**
      * Показать всплывающее сообщение
      *
      * @param resId идентификатор строкового ресурса сообщения
      */
     private fun showToast(resId: Int) {
-        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, resId, Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -104,12 +145,5 @@ class NoteActivity : AppCompatActivity(), NoteView {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, "$title\n$text")
         })
-    }
-
-    /**
-     * Открытие экрана "О приложении"
-     */
-    override fun openAboutScreen() {
-        startActivity(Intent(this, AboutActivity::class.java))
     }
 }

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Notes">
         <activity
-            android:name=".note.view.NoteActivity"
+            android:name="com.alexey.notes.notes_list.MainActivity"
             android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>

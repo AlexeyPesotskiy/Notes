@@ -1,7 +1,7 @@
-package com.alexey.notes.note.presenter
+package com.alexey.notes.notes_list.note.presenter
 
-import com.alexey.notes.note.model.Model
-import com.alexey.notes.note.view.NoteView
+import com.alexey.notes.notes_list.note.model.Model
+import com.alexey.notes.notes_list.note.view.NoteView
 
 /**
  * Презентер для [NoteView] и [Model]
@@ -12,6 +12,9 @@ class NotePresenter(private var model: Model) : Presenter {
 
     private lateinit var view: NoteView
 
+    var mTitle: String = ""
+    var mText: String = ""
+
     /**
      * Инициализация
      *
@@ -19,6 +22,12 @@ class NotePresenter(private var model: Model) : Presenter {
      */
     override fun attachView(view: NoteView) {
         this.view = view
+    }
+
+    override fun init(title: String, text: String) {
+        mTitle = title
+        mText = text
+        view.fillLayout(mTitle, mText)
     }
 
     /**
@@ -48,10 +57,7 @@ class NotePresenter(private var model: Model) : Presenter {
             view.shareNote(title, text)
     }
 
-    /**
-     * Обработка нажатия на кнопку "О приложении"
-     */
-    override fun aboutBtnClicked() {
-        view.openAboutScreen()
+    override fun backBtnClicked() {
+        view.onBackEvent()
     }
 }

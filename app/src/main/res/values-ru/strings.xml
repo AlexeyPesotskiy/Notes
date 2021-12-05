@@ -11,4 +11,5 @@
     <string name="note_empty_save">Заметка пуста, не сохранена</string>
     <string name="note_empty_share">Заметка пуста, не отправлена</string>
     <string name="app_version">Версия 0.1</string>
+    <string name="add_note">Добавить заметку</string>
 </resources>

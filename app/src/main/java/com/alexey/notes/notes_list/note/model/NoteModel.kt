@@ -1,4 +1,4 @@
-package com.alexey.notes.note.model
+package com.alexey.notes.notes_list.note.model
 
 /**
  * Модель для NotePresenter
@@ -11,7 +11,5 @@ class NoteModel : Model {
      * @param title заголовок заметки
      * @param text текст заметки
      */
-    override fun saveNote(title: String, text: String): Boolean {
-        return true
-    }
+    override fun saveNote(title: String, text: String): Boolean = true
 }

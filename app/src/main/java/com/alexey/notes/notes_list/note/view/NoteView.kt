@@ -1,6 +1,8 @@
-package com.alexey.notes.note.view
+package com.alexey.notes.notes_list.note.view
 
 interface NoteView {
+
+    fun fillLayout(title: String, text: String)
 
     fun onSaveSuccessEvent()
     fun onSaveFailedEvent()
@@ -9,5 +11,5 @@ interface NoteView {
     fun shareNote(title: String, text: String)
     fun onAttemptShareEmptyContent()
 
-    fun openAboutScreen()
+    fun onBackEvent()
 }
