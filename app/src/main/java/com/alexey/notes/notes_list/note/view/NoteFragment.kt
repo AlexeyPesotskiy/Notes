@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.alexey.notes.R
 import com.alexey.notes.databinding.FragmentNoteBinding
+import com.alexey.notes.notes_list.HomeButtonSupport
 import com.alexey.notes.notes_list.MainActivity
 import com.alexey.notes.notes_list.Note
 import com.alexey.notes.notes_list.note.model.NoteModel
@@ -40,7 +42,7 @@ class NoteFragment : Fragment(), NoteView {
         presenter.attachView(this)
 
         setHasOptionsMenu(true)
-        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as HomeButtonSupport).showHomeButton()
     }
 
     override fun onCreateView(
@@ -56,7 +58,7 @@ class NoteFragment : Fragment(), NoteView {
         super.onViewCreated(view, savedInstanceState)
 
         (arguments?.getSerializable(ARG_NOTE) as Note).apply {
-            presenter.init(mTitle, mText)
+            presenter.init(title, text)
         }
     }
 
@@ -87,7 +89,7 @@ class NoteFragment : Fragment(), NoteView {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as HomeButtonSupport).hideHomeButton()
     }
 
     /**

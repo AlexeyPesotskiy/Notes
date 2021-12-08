@@ -10,7 +10,7 @@ import com.alexey.notes.notes_list.view.NotesListFragment
 /**
  * Вью для [NotePresenter]
  */
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity(), HomeButtonSupport{
 
     private lateinit var binding: ActivityMainBinding
 
@@ -25,5 +25,13 @@ class MainActivity : AppCompatActivity(){
                 .add(R.id.fragment_container, NotesListFragment())
                 .commit()
         }
+    }
+
+    override fun showHomeButton() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun hideHomeButton() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 }

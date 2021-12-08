@@ -42,15 +42,13 @@ class NotesListFragment : Fragment(), NotesListView {
         presenter.attachView(this)
         presenter.initList()
 
-        adapter.setOnNoteClickListener(object : NoteAdapter.OnNoteClickListener{
-            override fun onNoteClick(note: Note, position: Int) {
-                activity?.supportFragmentManager
-                    ?.beginTransaction()
-                    ?.replace(R.id.fragment_container, NoteFragment.newInstance(note))
-                    ?.addToBackStack(null)
-                    ?.commit()
-            }
-        })
+        adapter.setOnNoteClickListener { note ->
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.replace(R.id.fragment_container, NoteFragment.newInstance(note))
+                ?.addToBackStack(null)
+                ?.commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

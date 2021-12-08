@@ -12,8 +12,8 @@ class NotePresenter(private var model: Model) : Presenter {
 
     private lateinit var view: NoteView
 
-    var mTitle: String = ""
-    var mText: String = ""
+    var title: String = ""
+    var text: String = ""
 
     /**
      * Инициализация
@@ -25,9 +25,9 @@ class NotePresenter(private var model: Model) : Presenter {
     }
 
     override fun init(title: String, text: String) {
-        mTitle = title
-        mText = text
-        view.fillLayout(mTitle, mText)
+        this.title = title
+        this.text = text
+        view.fillLayout(this.title, this.text)
     }
 
     /**
@@ -57,6 +57,9 @@ class NotePresenter(private var model: Model) : Presenter {
             view.shareNote(title, text)
     }
 
+    /**
+     * Обработка нажатия на кнопку "Назад"
+     */
     override fun backBtnClicked() {
         view.onBackEvent()
     }
