@@ -1,6 +1,6 @@
 package com.alexey.notes.notes_list.model
 
-import com.alexey.notes.notes_list.Note
+import com.alexey.notes.notes_list.recycler.Note
 
 class NotesListModel : Model {
 

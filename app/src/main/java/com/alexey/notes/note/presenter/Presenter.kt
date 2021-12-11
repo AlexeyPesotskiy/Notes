@@ -1,6 +1,6 @@
-package com.alexey.notes.notes_list.note.presenter
+package com.alexey.notes.note.presenter
 
-import com.alexey.notes.notes_list.note.view.NoteView
+import com.alexey.notes.note.view.NoteView
 
 interface Presenter {
 

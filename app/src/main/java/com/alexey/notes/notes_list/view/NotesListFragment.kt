@@ -4,13 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import com.alexey.notes.Constants
 import com.alexey.notes.R
 import com.alexey.notes.about.AboutActivity
 import com.alexey.notes.databinding.FragmentNotesListBinding
-import com.alexey.notes.notes_list.Note
-import com.alexey.notes.notes_list.NoteAdapter
+import com.alexey.notes.note.NoteActivity
+import com.alexey.notes.notes_list.recycler.Note
+import com.alexey.notes.notes_list.recycler.NoteAdapter
 import com.alexey.notes.notes_list.model.NotesListModel
-import com.alexey.notes.notes_list.note.view.NoteFragment
 import com.alexey.notes.notes_list.presenter.NotesListPresenter
 import com.alexey.notes.notes_list.presenter.Presenter
 
@@ -43,11 +44,9 @@ class NotesListFragment : Fragment(), NotesListView {
         presenter.initList()
 
         adapter.setOnNoteClickListener { note ->
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.replace(R.id.fragment_container, NoteFragment.newInstance(note))
-                ?.addToBackStack(null)
-                ?.commit()
+            startActivity(Intent(activity, NoteActivity::class.java)
+                .putExtra(Constants.NOTE_ITEM, note))
+
         }
     }
 

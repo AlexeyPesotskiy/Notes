@@ -1,7 +1,7 @@
-package com.alexey.notes.notes_list.note.presenter
+package com.alexey.notes.note.presenter
 
-import com.alexey.notes.notes_list.note.model.Model
-import com.alexey.notes.notes_list.note.view.NoteView
+import com.alexey.notes.note.model.Model
+import com.alexey.notes.note.view.NoteView
 
 /**
  * Презентер для [NoteView] и [Model]

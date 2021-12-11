@@ -1,19 +1,19 @@
-package com.alexey.notes.notes_list.note.view
+package com.alexey.notes.note.view
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.alexey.notes.Constants
 import com.alexey.notes.R
 import com.alexey.notes.databinding.FragmentNoteBinding
-import com.alexey.notes.notes_list.HomeButtonSupport
-import com.alexey.notes.notes_list.MainActivity
-import com.alexey.notes.notes_list.Note
-import com.alexey.notes.notes_list.note.model.NoteModel
-import com.alexey.notes.notes_list.note.presenter.NotePresenter
-import com.alexey.notes.notes_list.note.presenter.Presenter
+import com.alexey.notes.note.HomeButtonSupport
+import com.alexey.notes.note.NoteActivity
+import com.alexey.notes.notes_list.recycler.Note
+import com.alexey.notes.note.model.NoteModel
+import com.alexey.notes.note.presenter.NotePresenter
+import com.alexey.notes.note.presenter.Presenter
 
 class NoteFragment : Fragment(), NoteView {
 
@@ -124,7 +124,7 @@ class NoteFragment : Fragment(), NoteView {
      * Нажатие на кнопку назад
      */
     override fun onBackEvent() {
-        activity?.supportFragmentManager?.popBackStack()
+        activity?.finish()
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.alexey.notes.notes_list
+package com.alexey.notes.notes_list.recycler
 
 import android.view.LayoutInflater
 import android.view.View
