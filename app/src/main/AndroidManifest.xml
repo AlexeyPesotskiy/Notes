@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".note.NoteActivity" />
+        <activity android:name=".note.NotePagerActivity" />
         <activity android:name=".about.AboutActivity" />
     </application>
 

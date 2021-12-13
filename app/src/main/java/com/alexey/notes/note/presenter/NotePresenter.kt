@@ -12,8 +12,7 @@ class NotePresenter(private var model: Model) : Presenter {
 
     private lateinit var view: NoteView
 
-    var title: String = ""
-    var text: String = ""
+    var id: Long = 0
 
     /**
      * Инициализация
@@ -24,10 +23,20 @@ class NotePresenter(private var model: Model) : Presenter {
         this.view = view
     }
 
-    override fun init(title: String, text: String) {
-        this.title = title
-        this.text = text
-        view.fillLayout(this.title, this.text)
+    /**Инициализация
+     *
+     * Заполняем открытую заметку данными
+     * @param id id текущей заметки
+     */
+    override fun init(id: Long) {
+        this.id = id
+
+        if (id != 0L)
+            model.loadNote(id).let {
+                view.fillLayout(it.title, it.text)
+            }
+        else
+            view.fillLayout("", "")
     }
 
     /**
@@ -39,7 +48,11 @@ class NotePresenter(private var model: Model) : Presenter {
     override fun save(title: String, text: String) {
         when {
             title.isEmpty() || text.isEmpty() -> view.onAttemptSaveEmptyContent()
-            model.saveNote(title, text) -> view.onSaveSuccessEvent()
+            id == 0L -> {
+                id = model.addNote(title, text)
+                view.onSaveSuccessEvent()
+            }
+            model.updateNote(id, title, text) -> view.onSaveSuccessEvent()
             else -> view.onSaveFailedEvent()
         }
     }

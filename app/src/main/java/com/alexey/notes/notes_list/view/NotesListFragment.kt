@@ -8,7 +8,9 @@ import com.alexey.notes.Constants
 import com.alexey.notes.R
 import com.alexey.notes.about.AboutActivity
 import com.alexey.notes.databinding.FragmentNotesListBinding
-import com.alexey.notes.note.NoteActivity
+import com.alexey.notes.db.AppDataBase
+import com.alexey.notes.note.NotePagerActivity
+import com.alexey.notes.note.view.NoteFragment
 import com.alexey.notes.notes_list.recycler.Note
 import com.alexey.notes.notes_list.recycler.NoteAdapter
 import com.alexey.notes.notes_list.model.NotesListModel
@@ -17,8 +19,17 @@ import com.alexey.notes.notes_list.presenter.Presenter
 
 class NotesListFragment : Fragment(), NotesListView {
 
-    private lateinit var presenter: Presenter
+    companion object {
+        fun newInstance(dataBase: AppDataBase) : NotesListFragment {
+            val fragment = NotesListFragment()
+            fragment.dB = dataBase
+            return fragment
+        }
+    }
+
     private lateinit var binding: FragmentNotesListBinding
+    private lateinit var presenter: Presenter
+    private lateinit var dB: AppDataBase
     private var adapter = NoteAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,18 +46,27 @@ class NotesListFragment : Fragment(), NotesListView {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentNotesListBinding.inflate(inflater)
         binding.listNotes.adapter = adapter
+
+        binding.btnAdd.setOnClickListener {
+            presenter.addNoteBtnClicked()
+        }
+
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        presenter.updateList()
+    }
+
     private fun init() {
-        presenter = NotesListPresenter(NotesListModel())
+        presenter = NotesListPresenter(NotesListModel(dB))
         presenter.attachView(this)
         presenter.initList()
 
-        adapter.setOnNoteClickListener { note ->
-            startActivity(Intent(activity, NoteActivity::class.java)
-                .putExtra(Constants.NOTE_ITEM, note))
-
+        adapter.setOnNoteClickListener { position ->
+            startActivity(Intent(activity, NotePagerActivity::class.java)
+                .putExtra(Constants.NOTE_POSITION, position))
         }
     }
 
@@ -74,9 +94,27 @@ class NotesListFragment : Fragment(), NotesListView {
     }
 
     /**
+     * Добавление заметки в RecyclerView
+     */
+    override fun updateNote(note: Note) {
+        adapter.updateNote(note)
+    }
+
+    /**
      * Открытие экрана "О приложении"
      */
     override fun openAboutScreen() {
         startActivity(Intent(activity, AboutActivity::class.java))
+    }
+
+    /**
+     * Открытие экрана "Новая заметка"
+     */
+    override fun openNewNote() {
+        activity?.supportFragmentManager
+            ?.beginTransaction()
+            ?.replace(R.id.fragment_container, NoteFragment.newInstance(0L, dB))
+            ?.addToBackStack(null)
+            ?.commit()
     }
 }

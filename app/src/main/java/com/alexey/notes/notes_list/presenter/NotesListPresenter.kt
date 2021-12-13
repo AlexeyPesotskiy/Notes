@@ -1,20 +1,36 @@
 package com.alexey.notes.notes_list.presenter
 
 import com.alexey.notes.notes_list.model.Model
+import com.alexey.notes.notes_list.recycler.Note
 import com.alexey.notes.notes_list.view.NotesListView
 
 class NotesListPresenter(private var model: Model) : Presenter {
 
     private lateinit var view: NotesListView
+    private lateinit var noteList: List<Note>
 
     /**
      * Заполнение списка начальными данными
      */
     override fun initList() {
-        val noteList = model.loadData()
+        noteList = model.loadData()
         for (note in noteList)
             view.addNote(note)
     }
+
+    /**
+     * Обновление списка
+     */
+    override fun updateList() {
+        val updatedList = model.loadData()
+
+        for (note in updatedList)
+            if (!noteList.contains(note))
+                view.updateNote(note)
+
+        noteList = updatedList
+    }
+
     /**
      * Инициализация
      *
@@ -29,5 +45,12 @@ class NotesListPresenter(private var model: Model) : Presenter {
      */
     override fun aboutBtnClicked() {
         view.openAboutScreen()
+    }
+
+    /**
+     * Обработка нажатия на кнопку "Добавить заметку"
+     */
+    override fun addNoteBtnClicked() {
+        view.openNewNote()
     }
 }

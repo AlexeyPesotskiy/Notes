@@ -1,5 +1,7 @@
 package com.alexey.notes.note.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -8,29 +10,31 @@ import androidx.fragment.app.Fragment
 import com.alexey.notes.Constants
 import com.alexey.notes.R
 import com.alexey.notes.databinding.FragmentNoteBinding
+import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.note.HomeButtonSupport
-import com.alexey.notes.note.NoteActivity
-import com.alexey.notes.notes_list.recycler.Note
 import com.alexey.notes.note.model.NoteModel
 import com.alexey.notes.note.presenter.NotePresenter
 import com.alexey.notes.note.presenter.Presenter
+import com.alexey.notes.notes_list.MainActivity
 
 class NoteFragment : Fragment(), NoteView {
 
     companion object {
-        private const val ARG_NOTE = "args_note"
-        fun newInstance(note: Note) : NoteFragment {
-            val fragment = NoteFragment()
+        fun newInstance(noteID: Long, dataBase: AppDataBase) : NoteFragment {
             val bundle = Bundle()
-            bundle.putSerializable(ARG_NOTE, note)
+            bundle.putLong(Constants.ARG_NOTE_ID, noteID)
+
+            val fragment = NoteFragment()
             fragment.arguments = bundle
+            fragment.dB = dataBase
+
             return fragment
         }
-
     }
 
     private lateinit var binding: FragmentNoteBinding
     private lateinit var presenter: Presenter
+    private lateinit var dB: AppDataBase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,11 +42,11 @@ class NoteFragment : Fragment(), NoteView {
     }
 
     private fun init() {
-        presenter = NotePresenter(NoteModel())
+        presenter = NotePresenter(NoteModel(dB))
         presenter.attachView(this)
 
-        setHasOptionsMenu(true)
         (activity as HomeButtonSupport).showHomeButton()
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -57,17 +61,13 @@ class NoteFragment : Fragment(), NoteView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (arguments?.getSerializable(ARG_NOTE) as Note).apply {
-            presenter.init(title, text)
+        arguments?.getLong(Constants.ARG_NOTE_ID).apply {
+            presenter.init(this ?: 0L)
         }
     }
 
-    override fun fillLayout(title: String, text: String) {
-        binding.editTitle.setText(title)
-        binding.editText.setText(text)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.note_menu, menu)
     }
 
@@ -82,14 +82,36 @@ class NoteFragment : Fragment(), NoteView {
         when (item.itemId) {
             android.R.id.home -> presenter.backBtnClicked()
             R.id.note_share -> presenter.shareBtnClicked(title, text)
-            R.id.note_save -> presenter.save(title, text)
+            R.id.note_save -> {
+                val dialog = AlertDialog.Builder(activity)
+                dialog
+                    .setTitle(R.string.save)
+                    .setMessage(R.string.want_save_note)
+                    .setPositiveButton(R.string.ok ) { _: DialogInterface, _: Int ->
+                        presenter.save(title, text)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .create()
+                    .show()
+            }
         }
         return true
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         (activity as HomeButtonSupport).hideHomeButton()
+    }
+
+    /**
+     * Заполняем разметку экрана
+     *
+     * @param title заголовок заметки
+     * @param text текст заметки
+     */
+    override fun fillLayout(title: String, text: String) {
+        binding.editTitle.setText(title)
+        binding.editText.setText(text)
     }
 
     /**
@@ -124,7 +146,10 @@ class NoteFragment : Fragment(), NoteView {
      * Нажатие на кнопку назад
      */
     override fun onBackEvent() {
-        activity?.finish()
+        if (activity is MainActivity)
+            activity?.supportFragmentManager?.popBackStack()
+        else
+            activity?.finish()
     }
 
     /**

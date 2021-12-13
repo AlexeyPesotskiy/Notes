@@ -9,16 +9,17 @@ import com.alexey.notes.databinding.NoteItemBinding
 
 class NoteAdapter() : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
-    private lateinit var onClickListener: (note: Note) -> Unit
+    private lateinit var onClickListener: (Int) -> Unit
 
-    fun setOnNoteClickListener(listener: (note: Note) -> Unit) {
+    fun setOnNoteClickListener(listener: (Int) -> Unit) {
         onClickListener = listener
     }
 
-    private val noteList = ArrayList<Note>()
+    private val noteList = ArrayList<Note>(0)
 
     class NoteHolder(item: View) : RecyclerView.ViewHolder(item) {
         private val binding = NoteItemBinding.bind(item)
+
         fun bind(note: Note) = with(binding) {
             noteTitle.text = note.title
         }
@@ -31,8 +32,9 @@ class NoteAdapter() : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
     override fun onBindViewHolder(holder: NoteHolder, position: Int) {
         holder.bind(noteList[position])
+
         holder.itemView.setOnClickListener {
-            onClickListener(noteList[position])
+            onClickListener(position)
         }
     }
 
@@ -40,5 +42,14 @@ class NoteAdapter() : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
     fun addNote(note: Note) {
         noteList.add(note)
+    }
+
+    fun updateNote(note: Note) {
+        if (note.id <= noteList.size) {
+            noteList[note.id.toInt() - 1] = note
+            notifyItemChanged((note.id - 1).toInt())
+        }
+        else
+            addNote(note)
     }
 }

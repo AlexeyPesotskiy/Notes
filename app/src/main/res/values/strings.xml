@@ -2,7 +2,7 @@
     <string name="app_name">Notes</string>
     <string name="note_title">Enter the title</string>
     <string name="note_text">Enter the text</string>
-    <string name="menu_save">Save</string>
+    <string name="save">Save</string>
     <string name="note_saved">Note saved</string>
     <string name="note_save_failed">Note save failed</string>
     <string name="note_empty_save">Note is empty, not saved</string>
@@ -11,4 +11,7 @@
     <string name="add_note">Add note</string>
     <string name="about">About</string>
     <string name="app_version">Version 0.1</string>
+    <string name="want_save_note">Do you really want to save?</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok" translatable="false">OK</string>
 </resources>
