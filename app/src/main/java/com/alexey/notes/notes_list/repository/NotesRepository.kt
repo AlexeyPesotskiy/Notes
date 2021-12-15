@@ -1,8 +1,8 @@
-package com.alexey.notes.notes_list.model
+package com.alexey.notes.notes_list.repository
 
 import com.alexey.notes.notes_list.recycler.Note
 
-interface Model {
+interface NotesRepository {
 
     fun loadData() : List<Note>
 }

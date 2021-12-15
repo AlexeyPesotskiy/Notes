@@ -1,14 +1,14 @@
 package com.alexey.notes.note.presenter
 
-import com.alexey.notes.note.model.Model
+import com.alexey.notes.note.repository.NotesRepository
 import com.alexey.notes.note.view.NoteView
 
 /**
- * Презентер для [NoteView] и [Model]
+ * Презентер для [NoteView] и [NotesRepository]
  *
- * @param model модель, к которой имеем доступ через интерфейс
+ * @param notesRepository модель, к которой имеем доступ через интерфейс
  */
-class NotePresenter(private var model: Model) : Presenter {
+class NotePresenter(private var repository: NotesRepository) : Presenter {
 
     private lateinit var view: NoteView
 
@@ -32,7 +32,7 @@ class NotePresenter(private var model: Model) : Presenter {
         this.id = id
 
         if (id != 0L)
-            model.loadNote(id).let {
+            repository.loadNote(id).let {
                 view.fillLayout(it.title, it.text)
             }
         else
@@ -49,10 +49,10 @@ class NotePresenter(private var model: Model) : Presenter {
         when {
             title.isEmpty() || text.isEmpty() -> view.onAttemptSaveEmptyContent()
             id == 0L -> {
-                id = model.addNote(title, text)
+                id = repository.addNote(title, text)
                 view.onSaveSuccessEvent()
             }
-            model.updateNote(id, title, text) -> view.onSaveSuccessEvent()
+            repository.updateNote(id, title, text) -> view.onSaveSuccessEvent()
             else -> view.onSaveFailedEvent()
         }
     }

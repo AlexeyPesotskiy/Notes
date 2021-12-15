@@ -1,10 +1,10 @@
 package com.alexey.notes.notes_list.presenter
 
-import com.alexey.notes.notes_list.model.Model
+import com.alexey.notes.notes_list.repository.NotesRepository
 import com.alexey.notes.notes_list.recycler.Note
 import com.alexey.notes.notes_list.view.NotesListView
 
-class NotesListPresenter(private var model: Model) : Presenter {
+class NotesListPresenter(private var repository: NotesRepository) : Presenter {
 
     private lateinit var view: NotesListView
     private lateinit var noteList: List<Note>
@@ -13,7 +13,7 @@ class NotesListPresenter(private var model: Model) : Presenter {
      * Заполнение списка начальными данными
      */
     override fun initList() {
-        noteList = model.loadData()
+        noteList = repository.loadData()
         for (note in noteList)
             view.addNote(note)
     }
@@ -22,7 +22,7 @@ class NotesListPresenter(private var model: Model) : Presenter {
      * Обновление списка
      */
     override fun updateList() {
-        val updatedList = model.loadData()
+        val updatedList = repository.loadData()
 
         for (note in updatedList)
             if (!noteList.contains(note))

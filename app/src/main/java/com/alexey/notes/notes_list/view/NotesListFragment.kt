@@ -11,20 +11,19 @@ import com.alexey.notes.databinding.FragmentNotesListBinding
 import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.note.NotePagerActivity
 import com.alexey.notes.note.view.NoteFragment
-import com.alexey.notes.notes_list.recycler.Note
-import com.alexey.notes.notes_list.recycler.NoteAdapter
-import com.alexey.notes.notes_list.model.NotesListModel
+import com.alexey.notes.notes_list.repository.NotesRepositoryImpl
 import com.alexey.notes.notes_list.presenter.NotesListPresenter
 import com.alexey.notes.notes_list.presenter.Presenter
+import com.alexey.notes.notes_list.recycler.Note
+import com.alexey.notes.notes_list.recycler.NoteAdapter
 
 class NotesListFragment : Fragment(), NotesListView {
 
     companion object {
-        fun newInstance(dataBase: AppDataBase) : NotesListFragment {
-            val fragment = NotesListFragment()
-            fragment.dB = dataBase
-            return fragment
-        }
+        fun newInstance(dataBase: AppDataBase): NotesListFragment =
+            NotesListFragment().apply {
+                dB = dataBase
+            }
     }
 
     private lateinit var binding: FragmentNotesListBinding
@@ -60,7 +59,7 @@ class NotesListFragment : Fragment(), NotesListView {
     }
 
     private fun init() {
-        presenter = NotesListPresenter(NotesListModel(dB))
+        presenter = NotesListPresenter(NotesRepositoryImpl(dB))
         presenter.attachView(this)
         presenter.initList()
 

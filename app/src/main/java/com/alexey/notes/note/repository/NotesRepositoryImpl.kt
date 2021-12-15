@@ -1,12 +1,12 @@
-package com.alexey.notes.note.model
+package com.alexey.notes.note.repository
 
 import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.notes_list.recycler.Note
 
 /**
- * Модель для NotePresenter
+ * Репозиторий для NotePresenter
  */
-class NoteModel(var dataBase: AppDataBase) : Model {
+class NotesRepositoryImpl(var dataBase: AppDataBase) : NotesRepository {
 
     /**
      * Сохранить новую заметку в [AppDataBase]
@@ -19,7 +19,7 @@ class NoteModel(var dataBase: AppDataBase) : Model {
     }
 
     /**
-     * Сохранить заметку в [AppDataBase]
+     * Обновить заметку в [AppDataBase]
      *
      * @param title заголовок заметки
      * @param text текст заметки

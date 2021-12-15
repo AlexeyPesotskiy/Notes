@@ -1,6 +1,9 @@
 package com.alexey.notes.db
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import com.alexey.notes.notes_list.recycler.Note
 
 @Dao
@@ -12,7 +15,7 @@ interface NoteDAO {
     fun findNoteById(id: Long): Note
 
     @Insert
-    fun insert(note: Note) : Long
+    fun insert(note: Note): Long
 
     @Update
     fun update(note: Note)
