@@ -20,6 +20,8 @@ import com.alexey.notes.notes_list.recycler.NoteAdapter
 class NotesListFragment : Fragment(), NotesListView {
 
     companion object {
+        private lateinit var dB: AppDataBase
+
         fun newInstance(dataBase: AppDataBase): NotesListFragment =
             NotesListFragment().apply {
                 dB = dataBase
@@ -28,7 +30,6 @@ class NotesListFragment : Fragment(), NotesListView {
 
     private lateinit var binding: FragmentNotesListBinding
     private lateinit var presenter: Presenter
-    private lateinit var dB: AppDataBase
     private var adapter = NoteAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {

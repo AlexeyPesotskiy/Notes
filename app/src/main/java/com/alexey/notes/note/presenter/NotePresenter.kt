@@ -6,7 +6,7 @@ import com.alexey.notes.note.view.NoteView
 /**
  * Презентер для [NoteView] и [NotesRepository]
  *
- * @param notesRepository модель, к которой имеем доступ через интерфейс
+ * @param notesRepository репозиторий, к которой имеем доступ через интерфейс
  */
 class NotePresenter(private var repository: NotesRepository) : Presenter {
 

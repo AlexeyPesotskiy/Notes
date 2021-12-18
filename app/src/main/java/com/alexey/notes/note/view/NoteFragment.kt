@@ -1,7 +1,5 @@
 package com.alexey.notes.note.view
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -11,15 +9,18 @@ import com.alexey.notes.Constants
 import com.alexey.notes.R
 import com.alexey.notes.databinding.FragmentNoteBinding
 import com.alexey.notes.db.AppDataBase
+import com.alexey.notes.note.DialogSaveNoteFragment
 import com.alexey.notes.note.HomeButtonSupport
-import com.alexey.notes.note.repository.NotesRepositoryImpl
 import com.alexey.notes.note.presenter.NotePresenter
 import com.alexey.notes.note.presenter.Presenter
+import com.alexey.notes.note.repository.NotesRepositoryImpl
 import com.alexey.notes.notes_list.MainActivity
 
 class NoteFragment : Fragment(), NoteView {
 
     companion object {
+        private lateinit var dB: AppDataBase
+
         fun newInstance(noteID: Long, dataBase: AppDataBase): NoteFragment {
             val bundle = Bundle()
             bundle.putLong(Constants.ARG_NOTE_ID, noteID)
@@ -33,7 +34,6 @@ class NoteFragment : Fragment(), NoteView {
 
     private lateinit var binding: FragmentNoteBinding
     private lateinit var presenter: Presenter
-    private lateinit var dB: AppDataBase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +65,11 @@ class NoteFragment : Fragment(), NoteView {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as HomeButtonSupport).hideHomeButton()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
         inflater.inflate(R.menu.note_menu, menu)
@@ -82,23 +87,19 @@ class NoteFragment : Fragment(), NoteView {
             android.R.id.home -> presenter.backBtnClicked()
             R.id.note_share -> presenter.shareBtnClicked(title, text)
             R.id.note_save -> {
-                AlertDialog.Builder(activity)
-                    .setTitle(R.string.save)
-                    .setMessage(R.string.want_save_note)
-                    .setPositiveButton(R.string.ok) { _: DialogInterface, _: Int ->
-                        presenter.save(title, text)
-                    }
-                    .setNegativeButton(R.string.cancel, null)
-                    .create()
-                    .show()
+                DialogSaveNoteFragment().show(childFragmentManager, "save")
             }
         }
         return true
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        (activity as HomeButtonSupport).hideHomeButton()
+    /**
+     * Сохраняем заметку после нажатия на кнопку "ОК" в диалоговом окне
+     */
+    override fun continueSave() {
+        binding.apply {
+            presenter.save(editTitle.text.toString(), editText.text.toString())
+        }
     }
 
     /**
