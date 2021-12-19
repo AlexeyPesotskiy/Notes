@@ -16,8 +16,8 @@ abstract class AppDataBase : RoomDatabase() {
         private var INSTANCE: AppDataBase? = null
         private const val DB_NAME = "Notes"
 
-        fun getDataBase(context: Context): AppDataBase {
-            return INSTANCE ?: synchronized(this) {
+        fun getDataBase(context: Context): AppDataBase =
+            INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDataBase::class.java,
@@ -27,6 +27,5 @@ abstract class AppDataBase : RoomDatabase() {
 
                 instance
             }
-        }
     }
 }

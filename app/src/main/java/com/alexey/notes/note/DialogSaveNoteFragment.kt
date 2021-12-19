@@ -10,8 +10,8 @@ import java.lang.IllegalStateException
 
 class DialogSaveNoteFragment : DialogFragment() {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        activity?.let {
             AlertDialog.Builder(it)
                 .setTitle(R.string.save)
                 .setMessage(R.string.want_save_note)
@@ -21,5 +21,4 @@ class DialogSaveNoteFragment : DialogFragment() {
                 .setNegativeButton(R.string.cancel, null)
                 .create()
         } ?: throw IllegalStateException("Exception")
-    }
 }
