@@ -3,7 +3,9 @@ package com.alexey.notes.notes_list.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.alexey.notes.Constants
 import com.alexey.notes.R
 import com.alexey.notes.about.AboutActivity
@@ -12,9 +14,7 @@ import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.note.NotePagerActivity
 import com.alexey.notes.note.view.NoteFragment
 import com.alexey.notes.notes_list.repository.NotesRepositoryImpl
-import com.alexey.notes.notes_list.presenter.NotesListPresenter
-import com.alexey.notes.notes_list.presenter.Presenter
-import com.alexey.notes.notes_list.recycler.Note
+import com.alexey.notes.notes_list.view_model.NotesListViewModelImpl
 import com.alexey.notes.notes_list.recycler.NoteAdapter
 
 class NotesListFragment : Fragment(), NotesListView {
@@ -29,7 +29,7 @@ class NotesListFragment : Fragment(), NotesListView {
     }
 
     private lateinit var binding: FragmentNotesListBinding
-    private lateinit var presenter: Presenter
+    private lateinit var viewModel: NotesListViewModelImpl
     private var adapter = NoteAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,26 +43,35 @@ class NotesListFragment : Fragment(), NotesListView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentNotesListBinding.inflate(inflater)
-        binding.listNotes.adapter = adapter
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_notes_list,
+            container,
+            false
+        )
 
-        binding.btnAdd.setOnClickListener {
-            presenter.addNoteBtnClicked()
-        }
-
-        return binding.root
+        return binding.apply {
+            listNotes.adapter = adapter
+            btnAdd.setOnClickListener {
+                viewModel.addNoteBtnClicked()
+            }
+        }.root
     }
 
     override fun onStart() {
         super.onStart()
-        presenter.updateList()
+        viewModel.updateList()
     }
 
     private fun init() {
-        presenter = NotesListPresenter(NotesRepositoryImpl(dB))
-        presenter.attachView(this)
-        presenter.initList()
+        viewModel = ViewModelProvider(this)[NotesListViewModelImpl::class.java]
+
+        subscribeToViewModel()
+
+        viewModel.apply {
+            attachRepository(NotesRepositoryImpl(dB))
+            initList()
+        }
 
         adapter.setOnNoteClickListener { position ->
             startActivity(Intent(activity, NotePagerActivity::class.java)
@@ -81,23 +90,28 @@ class NotesListFragment : Fragment(), NotesListView {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.about_app -> presenter.aboutBtnClicked()
+            R.id.about_app -> viewModel.aboutBtnClicked()
         }
         return true
     }
 
-    /**
-     * Добавление заметки в RecyclerView
-     */
-    override fun addNote(note: Note) {
-        adapter.addNote(note)
-    }
+    private fun subscribeToViewModel() {
+        viewModel.onAddNoteEvent.observe(this) {
+            for (note in it)
+                adapter.addNote(note)
+        }
 
-    /**
-     * Добавление заметки в RecyclerView
-     */
-    override fun updateNote(note: Note) {
-        adapter.updateNote(note)
+        viewModel.onUpdateNoteEvent.observe(this) {
+            adapter.updateNote(it)
+        }
+
+        viewModel.onAboutBtnClickedEvent.observe(this) {
+            openAboutScreen()
+        }
+
+        viewModel.onAddNoteBtnClicked.observe(this) {
+            openNewNote()
+        }
     }
 
     /**

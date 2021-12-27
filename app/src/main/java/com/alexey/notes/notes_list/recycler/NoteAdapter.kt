@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alexey.notes.R
 import com.alexey.notes.databinding.NoteItemBinding
 
-class NoteAdapter() : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
+class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
     private lateinit var onClickListener: (Int) -> Unit
 

@@ -3,32 +3,27 @@ package com.alexey.notes.notes_list
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.alexey.notes.R
-import com.alexey.notes.databinding.ActivityMainBinding
 import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.note.HomeButtonSupport
-import com.alexey.notes.note.presenter.NotePresenter
+import com.alexey.notes.note.view_model.NoteViewModelImpl
 import com.alexey.notes.notes_list.view.NotesListFragment
 
 /**
- * Вью для [NotePresenter]
+ * Вью для [NoteViewModelImpl]
  */
 class MainActivity : AppCompatActivity(), HomeButtonSupport {
 
-    private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
         val dataBase = AppDataBase.getDataBase(this)
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fragment_container, NotesListFragment.newInstance(dataBase))
                 .commit()
-        }
     }
 
     override fun showHomeButton() {

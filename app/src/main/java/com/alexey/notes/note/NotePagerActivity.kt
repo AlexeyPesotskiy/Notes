@@ -2,7 +2,9 @@ package com.alexey.notes.note
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.alexey.notes.Constants
+import com.alexey.notes.R
 import com.alexey.notes.databinding.ActivityNotePagerBinding
 import com.alexey.notes.db.AppDataBase
 
@@ -13,8 +15,7 @@ class NotePagerActivity : AppCompatActivity(), HomeButtonSupport {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNotePagerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_note_pager)
 
         init()
     }

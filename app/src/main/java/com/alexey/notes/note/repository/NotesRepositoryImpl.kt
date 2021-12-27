@@ -4,9 +4,9 @@ import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.notes_list.recycler.Note
 
 /**
- * Репозиторий для NotePresenter
+ * Репозиторий для NoteViewModelImpl
  */
-class NotesRepositoryImpl(var dataBase: AppDataBase) : NotesRepository {
+open class NotesRepositoryImpl(var dataBase: AppDataBase) : NotesRepository {
 
     /**
      * Сохранить новую заметку в [AppDataBase]
