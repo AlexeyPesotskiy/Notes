@@ -3,7 +3,6 @@ package com.alexey.notes.note.view_model
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.alexey.notes.note.repository.NotesRepository
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,13 +18,8 @@ class NoteViewModelImplTest {
     @JvmField
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private var viewModel = NoteViewModelImpl()
-    private var repository = mock(NotesRepository::class.java)
-
-    @Before
-    fun setUp() {
-        viewModel.attachRepository(repository)
-    }
+    private val repository = mock(NotesRepository::class.java)
+    private var viewModel = NoteViewModelImpl(repository)
 
     @Test
     fun tryToSaveEmptyNote() {

@@ -5,12 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.alexey.notes.R
 import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.note.HomeButtonSupport
-import com.alexey.notes.note.view_model.NoteViewModelImpl
 import com.alexey.notes.notes_list.view.NotesListFragment
 
-/**
- * Вью для [NoteViewModelImpl]
- */
 class MainActivity : AppCompatActivity(), HomeButtonSupport {
 
     override fun onCreate(savedInstanceState: Bundle?) {

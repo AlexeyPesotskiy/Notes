@@ -7,24 +7,15 @@ import com.alexey.notes.note.view.NoteView
 import com.alexey.notes.notes_list.recycler.Note
 
 /**
- * NoteViewModel для [NoteView] и [NotesRepository]
+ * ViewModel для [NoteView] и [NotesRepository]
+ *
+ * @param repository репозиторий к которому имеем доступ через интерфейс
  */
-class NoteViewModelImpl : ViewModel(), NoteViewModel {
-
-    private lateinit var repository: NotesRepository
+class NoteViewModelImpl(private val repository: NotesRepository) : ViewModel(), NoteViewModel {
 
     var id: Long = 0
-    var title = ""
-    var text = ""
-
-    /**
-     * Инициализация
-     *
-     * @param repository репозиторий к которому имеем доступ через интерфейс
-     */
-    override fun attachRepository(repository: NotesRepository) {
-        this.repository = repository
-    }
+    override var title = ""
+    override var text = ""
 
     /**Инициализация
      *
@@ -76,32 +67,32 @@ class NoteViewModelImpl : ViewModel(), NoteViewModel {
     /**
      * Удалось сохранить заметку
      */
-    val onSaveSuccessEvent = SingleLiveEvent<Unit>()
+    override val onSaveSuccessEvent = SingleLiveEvent<Unit>()
 
     /**
      * Попытка сохранить пустую заметку
      */
-    val onAttemptSaveEmptyContent = SingleLiveEvent<Unit>()
+    override val onAttemptSaveEmptyContent = SingleLiveEvent<Unit>()
 
     /**
      * Не удалось сохранить заметку
      */
-    val onSaveFailedEvent = SingleLiveEvent<Unit>()
+    override val onSaveFailedEvent = SingleLiveEvent<Unit>()
 
 
     /**
      * Поделиться заметкой
      */
-    val onShareEvent = SingleLiveEvent<Note>()
+    override val onShareEvent = SingleLiveEvent<Note>()
 
     /**
      * Попытка поделиться пустой заметкой
      */
-    val onAttemptShareEmptyContent = SingleLiveEvent<Unit>()
+    override val onAttemptShareEmptyContent = SingleLiveEvent<Unit>()
 
 
     /**
      * Нажатие на кнопку назад
      */
-    val onBackEvent = SingleLiveEvent<Unit>()
+    override val onBackEvent = SingleLiveEvent<Unit>()
 }

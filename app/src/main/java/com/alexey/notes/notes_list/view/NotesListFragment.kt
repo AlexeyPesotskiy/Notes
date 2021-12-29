@@ -13,10 +13,15 @@ import com.alexey.notes.databinding.FragmentNotesListBinding
 import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.note.NotePagerActivity
 import com.alexey.notes.note.view.NoteFragment
-import com.alexey.notes.notes_list.repository.NotesRepositoryImpl
-import com.alexey.notes.notes_list.view_model.NotesListViewModelImpl
 import com.alexey.notes.notes_list.recycler.NoteAdapter
+import com.alexey.notes.notes_list.repository.NotesRepositoryImpl
+import com.alexey.notes.notes_list.view_model.NotesListViewModel
+import com.alexey.notes.notes_list.view_model.NotesListViewModelFactory
+import com.alexey.notes.notes_list.view_model.NotesListViewModelImpl
 
+/**
+ * Вью для [NotesListViewModelImpl]
+ */
 class NotesListFragment : Fragment(), NotesListView {
 
     companion object {
@@ -29,7 +34,7 @@ class NotesListFragment : Fragment(), NotesListView {
     }
 
     private lateinit var binding: FragmentNotesListBinding
-    private lateinit var viewModel: NotesListViewModelImpl
+    private lateinit var viewModel: NotesListViewModel
     private var adapter = NoteAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,14 +69,13 @@ class NotesListFragment : Fragment(), NotesListView {
     }
 
     private fun init() {
-        viewModel = ViewModelProvider(this)[NotesListViewModelImpl::class.java]
+        viewModel = ViewModelProvider(
+            this, NotesListViewModelFactory(NotesRepositoryImpl(dB))
+        )[NotesListViewModelImpl::class.java]
 
         subscribeToViewModel()
 
-        viewModel.apply {
-            attachRepository(NotesRepositoryImpl(dB))
-            initList()
-        }
+        viewModel.initList()
 
         adapter.setOnNoteClickListener { position ->
             startActivity(Intent(activity, NotePagerActivity::class.java)

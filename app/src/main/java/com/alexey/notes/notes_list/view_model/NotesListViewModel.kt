@@ -1,14 +1,21 @@
 package com.alexey.notes.notes_list.view_model
 
-import com.alexey.notes.notes_list.repository.NotesRepository
+import com.alexey.notes.arch.SingleLiveEvent
+import com.alexey.notes.notes_list.recycler.Note
 
 interface NotesListViewModel {
 
     fun initList()
     fun updateList()
 
-    fun attachRepository(repository: NotesRepository)
-
     fun aboutBtnClicked()
     fun addNoteBtnClicked()
+
+    val onAddNoteEvent: SingleLiveEvent<List<Note>>
+
+    val onUpdateNoteEvent: SingleLiveEvent<Note>
+
+    val onAboutBtnClickedEvent: SingleLiveEvent<Unit>
+
+    val onAddNoteBtnClicked: SingleLiveEvent<Unit>
 }

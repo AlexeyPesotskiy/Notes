@@ -14,9 +14,14 @@ import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.note.DialogSaveNoteFragment
 import com.alexey.notes.note.HomeButtonSupport
 import com.alexey.notes.note.repository.NotesRepositoryImpl
+import com.alexey.notes.note.view_model.NoteViewModel
+import com.alexey.notes.note.view_model.NoteViewModelFactory
 import com.alexey.notes.note.view_model.NoteViewModelImpl
 import com.alexey.notes.notes_list.MainActivity
 
+/**
+ * Вью для [NoteViewModelImpl]
+ */
 class NoteFragment : Fragment(), NoteView {
 
     companion object {
@@ -34,7 +39,7 @@ class NoteFragment : Fragment(), NoteView {
     }
 
     private lateinit var binding: FragmentNoteBinding
-    private lateinit var viewModel: NoteViewModelImpl
+    private lateinit var viewModel: NoteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +47,9 @@ class NoteFragment : Fragment(), NoteView {
     }
 
     private fun init() {
-        viewModel = ViewModelProvider(this)[NoteViewModelImpl::class.java]
-        viewModel.attachRepository(NotesRepositoryImpl(dB))
+        viewModel = ViewModelProvider(
+            this, NoteViewModelFactory(NotesRepositoryImpl(dB))
+        )[NoteViewModelImpl::class.java]
 
         subscribeToViewModel()
 
