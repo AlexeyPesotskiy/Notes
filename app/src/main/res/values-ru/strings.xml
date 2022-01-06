@@ -5,7 +5,6 @@
     <string name="note_text">Введите текст</string>
     <string name="note_saved">Заметка сохранена</string>
     <string name="note_save_failed">Не удалось сохранить заметку</string>
-    <string name="menu_share">Поделиться</string>
     <string name="about">О приложении</string>
     <string name="note_empty_save">Заметка пуста, не сохранена</string>
     <string name="note_empty_share">Заметка пуста, не отправлена</string>
@@ -14,4 +13,8 @@
     <string name="want_save_note">Действительно сохранить заметку?</string>
     <string name="cancel">Отмена</string>
     <string name="save">Сохранить</string>
+    <string name="title">Заголовок</string>
+    <string name="text">Текст</string>
+    <string name="share">Поделиться</string>
+    <string name="delete">Удалить</string>
 </resources>

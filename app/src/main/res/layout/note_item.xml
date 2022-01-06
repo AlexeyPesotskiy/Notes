@@ -12,7 +12,7 @@
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_marginRight="@dimen/horizontal_margin"
             android:layout_marginBottom="@dimen/vertical_margin"
-            app:cardBackgroundColor="@color/purple_200"
+            app:cardBackgroundColor="@color/purple_light"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -14,36 +14,57 @@
         android:layout_height="match_parent"
         tools:context=".note.view.NoteFragment">
 
-        <EditText
-            android:id="@+id/editTitle"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTitleField"
+            style="@style/editText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="no"
-            android:ems="10"
-            android:hint="@string/note_title"
-            android:inputType="textPersonName"
-            android:text="@={viewModel.title}"
-            android:textSize="@dimen/note_title_size"
-            android:textStyle="bold"
+            android:layout_height="0dp"
+            android:hint="@string/title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="0dp"
+            <EditText
+                android:id="@+id/editTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="no"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="@={viewModel.title}"
+                android:textSize="@dimen/note_title_size"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField"
+            style="@style/editText"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:autofillHints="no"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="@string/note_text"
-            android:inputType="textMultiLine"
-            android:text="@={viewModel.text}"
-            android:textSize="@dimen/note_text_size"
+            android:hint="@string/text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTitleField">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="no"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="@={viewModel.text}"
+                android:textSize="@dimen/note_text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
