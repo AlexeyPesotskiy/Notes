@@ -42,14 +42,28 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
     fun addNote(note: Note) {
         noteList.add(note)
+        notifyItemInserted(noteList.size - 1)
     }
 
     fun updateNote(note: Note) {
-        if (note.id <= noteList.size) {
-            noteList[note.id.toInt() - 1] = note
-            notifyItemChanged((note.id - 1).toInt())
+        noteList.indexOfFirst {
+            it.id == note.id
+        }.let {
+            if (it > -1) {
+                noteList[it] = note
+                notifyItemChanged(it)
+            } else
+                addNote(note)
         }
-        else
-            addNote(note)
+    }
+
+    fun deleteNote(id: Long) {
+        noteList.indexOfFirst {
+            it.id == id
+        }.let {
+            noteList.removeAt(it)
+            notifyItemRemoved(it)
+            notifyItemRangeChanged(it, itemCount)
+        }
     }
 }

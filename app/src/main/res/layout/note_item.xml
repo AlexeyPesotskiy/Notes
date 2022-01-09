@@ -12,6 +12,7 @@
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_marginRight="@dimen/horizontal_margin"
             android:layout_marginBottom="@dimen/vertical_margin"
+            app:cardElevation="@dimen/card_elevation"
             app:cardBackgroundColor="@color/purple_light"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:layout_constraintBottom_toBottomOf="parent"

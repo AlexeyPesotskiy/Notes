@@ -16,9 +16,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTitleField"
-            style="@style/editText"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            style="@style/inputLayout"
             android:hint="@string/title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,9 +40,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField"
-            style="@style/editText"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            style="@style/inputLayout"
             android:hint="@string/text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

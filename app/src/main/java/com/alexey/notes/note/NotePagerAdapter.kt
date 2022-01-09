@@ -15,5 +15,5 @@ class NotePagerAdapter(pagerActivity: NotePagerActivity)
     override fun getItemCount(): Int = items.size
 
     override fun createFragment(position: Int): Fragment =
-        NoteFragment.newInstance((position+1).toLong(), dataBase)
+        NoteFragment.newInstance(items[position].id, dataBase)
 }

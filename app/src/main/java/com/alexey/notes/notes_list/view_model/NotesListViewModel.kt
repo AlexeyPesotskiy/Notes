@@ -8,14 +8,16 @@ interface NotesListViewModel {
     fun initList()
     fun updateList()
 
+    fun downloadBtnClicked()
     fun aboutBtnClicked()
     fun addNoteBtnClicked()
 
-    val onAddNoteEvent: SingleLiveEvent<List<Note>>
+    val onAddNotesEvent: SingleLiveEvent<List<Note>>
+    val onUpdateNotesEvent: SingleLiveEvent<List<Note>>
+    val onDeleteNoteEvent: SingleLiveEvent<Note>
 
-    val onUpdateNoteEvent: SingleLiveEvent<Note>
-
+    val onDownloadSuccessEvent: SingleLiveEvent<Unit>
+    val onDownloadFailedEvent: SingleLiveEvent<Unit>
     val onAboutBtnClickedEvent: SingleLiveEvent<Unit>
-
     val onAddNoteBtnClicked: SingleLiveEvent<Unit>
 }

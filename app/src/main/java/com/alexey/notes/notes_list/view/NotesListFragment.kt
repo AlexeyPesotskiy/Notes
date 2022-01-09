@@ -3,6 +3,7 @@ package com.alexey.notes.notes_list.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -95,18 +96,32 @@ class NotesListFragment : Fragment(), NotesListView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.about_app -> viewModel.aboutBtnClicked()
+            R.id.note_download -> viewModel.downloadBtnClicked()
         }
         return true
     }
 
     private fun subscribeToViewModel() {
-        viewModel.onAddNoteEvent.observe(this) {
+        viewModel.onAddNotesEvent.observe(this) {
             for (note in it)
                 adapter.addNote(note)
         }
 
-        viewModel.onUpdateNoteEvent.observe(this) {
-            adapter.updateNote(it)
+        viewModel.onUpdateNotesEvent.observe(this) {
+            for (note in it)
+                adapter.updateNote(note)
+        }
+
+        viewModel.onDeleteNoteEvent.observe(this) {
+            adapter.deleteNote(it.id)
+        }
+
+        viewModel.onDownloadSuccessEvent.observe(this) {
+            Toast.makeText(activity, R.string.note_downloaded, Toast.LENGTH_SHORT).show()
+        }
+
+        viewModel.onDownloadFailedEvent.observe(this) {
+            Toast.makeText(activity, R.string.note_download_failed, Toast.LENGTH_SHORT).show()
         }
 
         viewModel.onAboutBtnClickedEvent.observe(this) {

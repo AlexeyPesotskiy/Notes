@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Заметки</string>
-    <string name="note_title">Введите заголовок</string>
-    <string name="note_text">Введите текст</string>
     <string name="note_saved">Заметка сохранена</string>
     <string name="note_save_failed">Не удалось сохранить заметку</string>
     <string name="about">О приложении</string>
@@ -17,4 +15,9 @@
     <string name="text">Текст</string>
     <string name="share">Поделиться</string>
     <string name="delete">Удалить</string>
+    <string name="note_deleted">Заметка удалена</string>
+    <string name="note_delete_failed">Не удалось удалить заметку</string>
+    <string name="download_note">Скачать заметку</string>
+    <string name="note_downloaded">Заметка скачена</string>
+    <string name="note_download_failed">Не удалось скачать заметку</string>
 </resources>

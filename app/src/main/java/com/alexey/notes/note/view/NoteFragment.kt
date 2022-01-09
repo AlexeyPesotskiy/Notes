@@ -53,8 +53,8 @@ class NoteFragment : Fragment(), NoteView {
 
         subscribeToViewModel()
 
-        (activity as HomeButtonSupport).showHomeButton()
         setHasOptionsMenu(true)
+        (activity as HomeButtonSupport).showHomeButton()
     }
 
     override fun onCreateView(
@@ -68,22 +68,13 @@ class NoteFragment : Fragment(), NoteView {
             container,
             false
         ).also {
+            arguments?.getLong(Constants.ARG_NOTE_ID).apply {
+                viewModel.init(this ?: 0L)
+            }
+
             it.viewModel = this.viewModel
             binding = it
         }.root
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        arguments?.getLong(Constants.ARG_NOTE_ID).apply {
-            viewModel.init(this ?: 0L)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        (activity as HomeButtonSupport).hideHomeButton()
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
@@ -102,6 +93,7 @@ class NoteFragment : Fragment(), NoteView {
             R.id.note_save -> {
                 DialogSaveNoteFragment().show(childFragmentManager, "save")
             }
+            R.id.note_delete -> viewModel.deleteBtnClicked()
         }
         return true
     }
@@ -138,11 +130,22 @@ class NoteFragment : Fragment(), NoteView {
         }
 
 
+        viewModel.onDeleteSuccessEvent.observe(this) {
+            showToast(R.string.note_deleted)
+        }
+
+        viewModel.onDeleteFailedEvent.observe(this) {
+            showToast(R.string.note_delete_failed)
+        }
+
+
         viewModel.onBackEvent.observe(this) {
             if (activity is MainActivity)
                 activity?.supportFragmentManager?.popBackStack()
             else
                 activity?.finish()
+
+            (activity as HomeButtonSupport).hideHomeButton()
         }
     }
 

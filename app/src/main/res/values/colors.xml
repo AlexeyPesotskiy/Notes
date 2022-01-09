@@ -10,5 +10,6 @@
     <color name="white">#e3e8f0</color>
     <color name="purple_dark">#5f218e</color>
 
-    <color name="black">#D82D322F</color>
+    <color name="black_light">#E62D322F</color>
+    <color name="black_dark">#101010</color>
 </resources>
