@@ -56,7 +56,7 @@ class NotesListViewModelImpl(private val repository: NotesRepository) : ViewMode
      * Обработка нажатия на кнопку "Скачать заметку"
      */
     override fun downloadBtnClicked() {
-        NoteInteractor().getNote().enqueue(object : Callback<Note> {
+        NoteInteractor().fetchNote().enqueue(object : Callback<Note> {
             override fun onResponse(call: Call<Note>, response: Response<Note>) {
                 val title = response.body()?.title.orEmpty()
                 val text = response.body()?.text.orEmpty()

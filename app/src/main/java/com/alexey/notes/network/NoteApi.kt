@@ -7,5 +7,5 @@ import retrofit2.http.GET
 interface NoteApi {
 
     @GET("Note.json?alt=media")
-    fun getNote(): Call<Note>
+    fun fetchNote(): Call<Note>
 }

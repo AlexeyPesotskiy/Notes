@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class NoteInteractor {
 
-    fun getNote(): Call<Note> = Retrofit.Builder()
+    fun fetchNote(): Call<Note> = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(
             GsonConverterFactory.create(
@@ -20,7 +20,7 @@ class NoteInteractor {
                     .create()
             )
         )
-        .build().create(NoteApi::class.java).getNote()
+        .build().create(NoteApi::class.java).fetchNote()
 
     companion object {
         private const val BASE_URL =

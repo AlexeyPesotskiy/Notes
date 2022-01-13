@@ -68,8 +68,8 @@ class NoteFragment : Fragment(), NoteView {
             container,
             false
         ).also {
-            arguments?.getLong(Constants.ARG_NOTE_ID).apply {
-                viewModel.init(this ?: 0L)
+            arguments?.getLong(Constants.ARG_NOTE_ID).let {
+                viewModel.init(it ?: 0L)
             }
 
             it.viewModel = this.viewModel
