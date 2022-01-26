@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -78,14 +79,15 @@ class NotesListFragment : Fragment(), NotesListView {
 
         viewModel.initList()
 
-        adapter.setOnNoteClickListener { position ->
+        adapter.setOnNoteClickListener { id ->
             startActivity(Intent(activity, NotePagerActivity::class.java)
-                .putExtra(Constants.NOTE_POSITION, position))
+                .putExtra(Constants.NOTE_POSITION, id))
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_notes_menu, menu)
+        setupSearch(menu)
     }
 
     /**
@@ -101,6 +103,18 @@ class NotesListFragment : Fragment(), NotesListView {
         return true
     }
 
+    private fun setupSearch(menu: Menu) {
+        (menu.findItem(R.id.search)?.actionView as SearchView)
+            .setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String): Boolean = false
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    viewModel.updateListOnSearch(newText)
+                    return false
+                }
+            })
+    }
+
     private fun subscribeToViewModel() {
         viewModel.onAddNotesEvent.observe(this) {
             for (note in it)
@@ -110,6 +124,12 @@ class NotesListFragment : Fragment(), NotesListView {
         viewModel.onUpdateNotesEvent.observe(this) {
             for (note in it)
                 adapter.updateNote(note)
+        }
+
+        viewModel.onSearchNotesEvent.observe(this) {
+            adapter.deleteAllNotes()
+            for (note in it)
+                adapter.addNote(note)
         }
 
         viewModel.onDeleteNoteEvent.observe(this) {

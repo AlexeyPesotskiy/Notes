@@ -20,4 +20,5 @@
     <string name="download_note">Скачать заметку</string>
     <string name="note_downloaded">Заметка скачена</string>
     <string name="note_download_failed">Не удалось скачать заметку</string>
+    <string name="search_note">Искать заметку</string>
 </resources>

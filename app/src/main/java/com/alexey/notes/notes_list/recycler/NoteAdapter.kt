@@ -9,9 +9,9 @@ import com.alexey.notes.databinding.NoteItemBinding
 
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
-    private lateinit var onClickListener: (Int) -> Unit
+    private lateinit var onClickListener: (Long) -> Unit
 
-    fun setOnNoteClickListener(listener: (Int) -> Unit) {
+    fun setOnNoteClickListener(listener: (Long) -> Unit) {
         onClickListener = listener
     }
 
@@ -34,7 +34,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
         holder.bind(noteList[position])
 
         holder.itemView.setOnClickListener {
-            onClickListener(position)
+            onClickListener(noteList[position].id)
         }
     }
 
@@ -65,5 +65,10 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
             notifyItemRemoved(it)
             notifyItemRangeChanged(it, itemCount)
         }
+    }
+
+    fun deleteAllNotes() {
+        noteList.clear()
+        notifyDataSetChanged()
     }
 }

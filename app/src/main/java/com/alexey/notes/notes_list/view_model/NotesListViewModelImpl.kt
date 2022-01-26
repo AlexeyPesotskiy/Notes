@@ -53,6 +53,17 @@ class NotesListViewModelImpl(private val repository: NotesRepository) : ViewMode
     }
 
     /**
+     * Обновление списка при поиске
+     *
+     * @param searchText текст, введённый в строку поиска
+     */
+    override fun updateListOnSearch(searchText: String) {
+        onSearchNotesEvent.value = noteList.filter {
+            it.title.contains(searchText) || it.text.contains(searchText)
+        }
+    }
+
+    /**
      * Обработка нажатия на кнопку "Скачать заметку"
      */
     override fun downloadBtnClicked() {
@@ -99,6 +110,11 @@ class NotesListViewModelImpl(private val repository: NotesRepository) : ViewMode
      * Обновление заметки в RecyclerView
      */
     override val onUpdateNotesEvent = SingleLiveEvent<List<Note>>()
+
+    /**
+     * Поиск заметки в RecyclerView
+     */
+    override val onSearchNotesEvent = SingleLiveEvent<List<Note>>()
 
     /**
      * Удаление заметки из RecyclerView

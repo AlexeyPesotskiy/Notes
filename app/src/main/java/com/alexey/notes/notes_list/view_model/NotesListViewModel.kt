@@ -7,6 +7,7 @@ interface NotesListViewModel {
 
     fun initList()
     fun updateList()
+    fun updateListOnSearch(searchText: String)
 
     fun downloadBtnClicked()
     fun aboutBtnClicked()
@@ -14,6 +15,7 @@ interface NotesListViewModel {
 
     val onAddNotesEvent: SingleLiveEvent<List<Note>>
     val onUpdateNotesEvent: SingleLiveEvent<List<Note>>
+    val onSearchNotesEvent: SingleLiveEvent<List<Note>>
     val onDeleteNoteEvent: SingleLiveEvent<Note>
 
     val onDownloadSuccessEvent: SingleLiveEvent<Unit>
