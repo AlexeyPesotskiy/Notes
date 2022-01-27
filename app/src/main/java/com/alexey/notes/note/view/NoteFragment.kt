@@ -36,6 +36,9 @@ class NoteFragment : Fragment(), NoteView {
                 dB = dataBase
             }
         }
+
+        const val ACTION = "com.alexey.notes.action_saving"
+        const val NOTE_INFO = "note_info"
     }
 
     private lateinit var binding: FragmentNoteBinding
@@ -110,6 +113,10 @@ class NoteFragment : Fragment(), NoteView {
     private fun subscribeToViewModel() {
         viewModel.onSaveSuccessEvent.observe(this) {
             showToast(R.string.note_saved)
+            activity?.sendBroadcast(Intent().apply {
+                action = ACTION
+                putExtra(NOTE_INFO, "id: ${it.id} title: ${it.title}")
+            })
         }
 
         viewModel.onSaveFailedEvent.observe(this) {

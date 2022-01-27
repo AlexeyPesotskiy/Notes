@@ -40,9 +40,10 @@ class NoteViewModelImpl(private val repository: NotesRepository) : ViewModel(), 
             title.isEmpty() || text.isEmpty() -> onAttemptSaveEmptyContent.call()
             id == 0L -> {
                 id = repository.addNote(title, text)
-                onSaveSuccessEvent.call()
+                onSaveSuccessEvent.value = Note(id, title, text)
             }
-            repository.updateNote(id, title, text) -> onSaveSuccessEvent.call()
+            repository.updateNote(id, title, text) ->
+                onSaveSuccessEvent.value = Note(id, title, text)
             else -> onSaveFailedEvent.call()
         }
     }
@@ -79,7 +80,7 @@ class NoteViewModelImpl(private val repository: NotesRepository) : ViewModel(), 
     /**
      * Удалось сохранить заметку
      */
-    override val onSaveSuccessEvent = SingleLiveEvent<Unit>()
+    override val onSaveSuccessEvent = SingleLiveEvent<Note>()
 
     /**
      * Попытка сохранить пустую заметку

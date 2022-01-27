@@ -15,7 +15,7 @@ interface NoteViewModel {
     fun deleteBtnClicked()
     fun backBtnClicked()
 
-    val onSaveSuccessEvent: SingleLiveEvent<Unit>
+    val onSaveSuccessEvent: SingleLiveEvent<Note>
     val onAttemptSaveEmptyContent: SingleLiveEvent<Unit>
     val onSaveFailedEvent: SingleLiveEvent<Unit>
 
