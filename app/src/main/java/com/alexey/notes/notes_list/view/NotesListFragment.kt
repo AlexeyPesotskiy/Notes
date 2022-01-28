@@ -79,7 +79,7 @@ class NotesListFragment : Fragment(), NotesListView {
             this, NotesListViewModelFactory(NotesRepositoryImpl(dB))
         )[NotesListViewModelImpl::class.java]
 
-        viewModel.initList()
+        viewModel.updateList()
         subscribeToViewModel()
 
         setupWorker()
@@ -130,24 +130,8 @@ class NotesListFragment : Fragment(), NotesListView {
     }
 
     private fun subscribeToViewModel() {
-        viewModel.onAddNotesEvent.observe(this) {
-            for (note in it)
-                adapter.addNote(note)
-        }
-
         viewModel.onUpdateNotesEvent.observe(this) {
-            for (note in it)
-                adapter.updateNote(note)
-        }
-
-        viewModel.onSearchNotesEvent.observe(this) {
-            adapter.deleteAllNotes()
-            for (note in it)
-                adapter.addNote(note)
-        }
-
-        viewModel.onDeleteNoteEvent.observe(this) {
-            adapter.deleteNote(it.id)
+            adapter.submitList(it)
         }
 
         viewModel.onDownloadSuccessEvent.observe(this) {
