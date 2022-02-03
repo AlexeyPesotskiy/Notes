@@ -34,6 +34,13 @@ android {
     buildFeatures {
         dataBinding true
     }
+    sourceSets {
+        main {
+            assets {
+                srcDirs 'src\\main\\assets'
+            }
+        }
+    }
 }
 
 dependencies {
@@ -54,6 +61,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'android.arch.core:core-testing:1.1.1'

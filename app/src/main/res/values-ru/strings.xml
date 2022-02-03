@@ -6,7 +6,6 @@
     <string name="about">О приложении</string>
     <string name="note_empty_save">Заметка пуста, не сохранена</string>
     <string name="note_empty_share">Заметка пуста, не отправлена</string>
-    <string name="app_version">Версия 0.1</string>
     <string name="add_note">Добавить заметку</string>
     <string name="want_save_note">Действительно сохранить заметку?</string>
     <string name="cancel">Отмена</string>
@@ -21,4 +20,8 @@
     <string name="note_downloaded">Заметка скачена</string>
     <string name="note_download_failed">Не удалось скачать заметку</string>
     <string name="search_note">Искать заметку</string>
+    <string name="html_code"><![CDATA[<p>Нажмите для определения местоположения</p>]]></string>
+    <string name="location_access_required">Разрешите доступ к местоположению</string>
+    <string name="location_failed">Не удалось определить местоположение</string>
+    <string name="turn_on_location">Включите геолокацию</string>
 </resources>
