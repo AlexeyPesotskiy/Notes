@@ -134,19 +134,19 @@ class NotesListFragment : Fragment(), NotesListView {
             adapter.submitList(it)
         }
 
-        viewModel.onDownloadSuccessEvent.observe(this) {
+        viewModel.onDownloadSuccessEvent.observe(this) { _: Unit? ->
             Toast.makeText(activity, R.string.note_downloaded, Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.onDownloadFailedEvent.observe(this) {
+        viewModel.onDownloadFailedEvent.observe(this) { _: Unit? ->
             Toast.makeText(activity, R.string.note_download_failed, Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.onAboutBtnClickedEvent.observe(this) {
+        viewModel.onAboutBtnClickedEvent.observe(this) { _: Unit? ->
             openAboutScreen()
         }
 
-        viewModel.onAddNoteBtnClicked.observe(this) {
+        viewModel.onAddNoteBtnClicked.observe(this) { _: Unit? ->
             openNewNote()
         }
     }

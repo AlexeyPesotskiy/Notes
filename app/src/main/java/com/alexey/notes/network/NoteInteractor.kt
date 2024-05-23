@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * Интерактор для загрузки заметки
  */
-class NoteInteractor {
+class NoteInteractor  {
 
     fun fetchNote(): Call<Note> = Retrofit.Builder()
         .baseUrl(BASE_URL)
