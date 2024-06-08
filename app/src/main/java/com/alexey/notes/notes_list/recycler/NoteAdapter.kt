@@ -3,19 +3,19 @@ package com.alexey.notes.notes_list.recycler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alexey.notes.R
 import com.alexey.notes.databinding.NoteItemBinding
 
-class NoteAdapter() : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
+class NoteAdapter : ListAdapter<Note, NoteAdapter.NoteHolder>(NoteItemDiffCallback()) {
 
-    private lateinit var onClickListener: (Int) -> Unit
+    private lateinit var onClickListener: (Long) -> Unit
 
-    fun setOnNoteClickListener(listener: (Int) -> Unit) {
+    fun setOnNoteClickListener(listener: (Long) -> Unit) {
         onClickListener = listener
     }
-
-    private val noteList = ArrayList<Note>(0)
 
     class NoteHolder(item: View) : RecyclerView.ViewHolder(item) {
         private val binding = NoteItemBinding.bind(item)
@@ -25,31 +25,27 @@ class NoteAdapter() : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
-        return NoteHolder(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteHolder =
+        NoteHolder(
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.note_item, parent, false)
+        )
 
-    override fun onBindViewHolder(holder: NoteHolder, position: Int) {
-        holder.bind(noteList[position])
+    override fun onBindViewHolder(holder: NoteHolder, position: Int) = with(holder) {
+        bind(getItem(position))
 
-        holder.itemView.setOnClickListener {
-            onClickListener(position)
+        itemView.setOnClickListener {
+            onClickListener(getItem(absoluteAdapterPosition).id)
         }
     }
 
-    override fun getItemCount(): Int = noteList.size
+    class NoteItemDiffCallback : DiffUtil.ItemCallback<Note>() {
 
-    fun addNote(note: Note) {
-        noteList.add(note)
-    }
+        override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean =
+            oldItem.id == newItem.id
 
-    fun updateNote(note: Note) {
-        if (note.id <= noteList.size) {
-            noteList[note.id.toInt() - 1] = note
-            notifyItemChanged((note.id - 1).toInt())
-        }
-        else
-            addNote(note)
+        override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean =
+            oldItem.title == newItem.title && oldItem.text == newItem.text
     }
 }

@@ -4,9 +4,9 @@ import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.notes_list.recycler.Note
 
 /**
- * Репозиторий для NotePresenter
+ * Репозиторий для NoteViewModelImpl
  */
-class NotesRepositoryImpl(var dataBase: AppDataBase) : NotesRepository {
+open class NotesRepositoryImpl(var dataBase: AppDataBase) : NotesRepository {
 
     /**
      * Сохранить новую заметку в [AppDataBase]
@@ -14,9 +14,8 @@ class NotesRepositoryImpl(var dataBase: AppDataBase) : NotesRepository {
      * @param title заголовок заметки
      * @param text текст заметки
      */
-    override fun addNote(title: String, text: String): Long {
-        return dataBase.noteDao().insert(Note(title = title, text = text))
-    }
+    override fun addNote(title: String, text: String): Long =
+        dataBase.noteDao().insert(Note(title = title, text = text))
 
     /**
      * Обновить заметку в [AppDataBase]
@@ -35,4 +34,11 @@ class NotesRepositoryImpl(var dataBase: AppDataBase) : NotesRepository {
      * @param id id заметки в [dataBase]
      */
     override fun loadNote(id: Long): Note = dataBase.noteDao().findNoteById(id)
+
+    /**
+     * Удалить заметку из [AppDataBase]
+     *
+     * @param id id заметки в [dataBase]
+     */
+    override fun deleteNote(id: Long) = dataBase.noteDao().delete(id)
 }
