@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.alexey.notes.Constants
@@ -122,7 +123,9 @@ class NotesListFragment : Fragment(), NotesListView {
 
     private fun setupWorker() {
         WorkManager.getInstance(requireContext())
-            .enqueue(
+            .enqueueUniquePeriodicWork(
+                BackupWorker.TAG,
+                ExistingPeriodicWorkPolicy.KEEP,
                 PeriodicWorkRequest
                     .Builder(BackupWorker::class.java, 15, TimeUnit.MINUTES)
                     .build()

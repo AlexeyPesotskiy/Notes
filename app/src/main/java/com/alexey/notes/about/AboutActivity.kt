@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.alexey.notes.R
 import com.alexey.notes.databinding.ActivityAboutBinding
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 
 /**
@@ -29,7 +29,6 @@ class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_about)
-
         init()
     }
 
@@ -82,7 +81,7 @@ class AboutActivity : AppCompatActivity() {
     fun showUserLocation() {
         LocationServices.getFusedLocationProviderClient(this)
             .getCurrentLocation(
-                LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, CancellationTokenSource().token
+                Priority.PRIORITY_BALANCED_POWER_ACCURACY , CancellationTokenSource().token
             )
             .addOnSuccessListener {
                 binding.userLocation.text = it.latitude.toString() + " " + it.longitude
