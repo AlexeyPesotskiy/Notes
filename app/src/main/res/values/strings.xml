@@ -1,13 +1,35 @@
 <resources>
     <string name="app_name">Notes</string>
-    <string name="note_title">Enter the title</string>
-    <string name="note_text">Enter the text</string>
-    <string name="menu_save">Save</string>
+    <string name="title">Title</string>
+    <string name="text">Text</string>
+
+    <string name="save">Save</string>
     <string name="note_saved">Note saved</string>
     <string name="note_save_failed">Note save failed</string>
     <string name="note_empty_save">Note is empty, not saved</string>
+    <string name="want_save_note">Do you really want to save?</string>
+
+    <string name="share">Share</string>
     <string name="note_empty_share">Note is empty, not shared</string>
-    <string name="menu_share">Share</string>
+
+    <string name="delete">Delete</string>
+    <string name="note_deleted">Note deleted</string>
+    <string name="note_delete_failed">Note delete failed</string>
+
+    <string name="download_note">Download note</string>
+    <string name="note_downloaded">Note downloaded</string>
+    <string name="note_download_failed">Note download failed</string>
+
+    <string name="add_note">Add note</string>
+
+    <string name="search_note">Search note</string>
+    
     <string name="about">About</string>
-    <string name="app_version">Version 0.1</string>
+    <string name="html_code"><![CDATA[<p>Click to show location</p>]]></string>
+    <string name="location_access_required">Allow location access</string>
+    <string name="location_failed">Failed to determine location</string>
+    <string name="turn_on_location">Turn on location</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="ok" translatable="false">OK</string>
 </resources>
