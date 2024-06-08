@@ -18,6 +18,6 @@ class BackupWorker(context: Context, workerParameters: WorkerParameters) :
     }
 
     companion object {
-        private const val TAG = "BACKUP_NOTES"
+        const val TAG = "BACKUP_NOTES"
     }
 }

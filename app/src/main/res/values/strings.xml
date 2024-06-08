@@ -25,7 +25,10 @@
     <string name="search_note">Search note</string>
     
     <string name="about">About</string>
-    <string name="app_version">Version 0.1</string>
+    <string name="html_code"><![CDATA[<p>Click to show location</p>]]></string>
+    <string name="location_access_required">Allow location access</string>
+    <string name="location_failed">Failed to determine location</string>
+    <string name="turn_on_location">Turn on location</string>
 
     <string name="cancel">Cancel</string>
     <string name="ok" translatable="false">OK</string>
