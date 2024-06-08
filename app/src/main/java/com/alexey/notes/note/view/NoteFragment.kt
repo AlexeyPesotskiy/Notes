@@ -36,6 +36,9 @@ class NoteFragment : Fragment(), NoteView {
                 dB = dataBase
             }
         }
+
+        const val ACTION = "com.alexey.notes.action_saving"
+        const val NOTE_INFO = "note_info"
     }
 
     private lateinit var binding: FragmentNoteBinding
@@ -110,13 +113,17 @@ class NoteFragment : Fragment(), NoteView {
     private fun subscribeToViewModel() {
         viewModel.onSaveSuccessEvent.observe(this) {
             showToast(R.string.note_saved)
+            activity?.sendBroadcast(Intent().apply {
+                action = ACTION
+                putExtra(NOTE_INFO, "id: ${it.id} title: ${it.title}")
+            })
         }
 
-        viewModel.onSaveFailedEvent.observe(this) {
+        viewModel.onSaveFailedEvent.observe(this) { _: Unit? ->
             showToast(R.string.note_save_failed)
         }
 
-        viewModel.onAttemptSaveEmptyContent.observe(this) {
+        viewModel.onAttemptSaveEmptyContent.observe(this) { _: Unit? ->
             showToast(R.string.note_empty_save)
         }
 
@@ -125,21 +132,21 @@ class NoteFragment : Fragment(), NoteView {
             shareNote(it.title, it.text)
         }
 
-        viewModel.onAttemptShareEmptyContent.observe(this) {
+        viewModel.onAttemptShareEmptyContent.observe(this) { _: Unit? ->
             showToast(R.string.note_empty_share)
         }
 
 
-        viewModel.onDeleteSuccessEvent.observe(this) {
+        viewModel.onDeleteSuccessEvent.observe(this) { _: Unit? ->
             showToast(R.string.note_deleted)
         }
 
-        viewModel.onDeleteFailedEvent.observe(this) {
+        viewModel.onDeleteFailedEvent.observe(this) { _: Unit? ->
             showToast(R.string.note_delete_failed)
         }
 
 
-        viewModel.onBackEvent.observe(this) {
+        viewModel.onBackEvent.observe(this) {  _: Unit? ->
             if (activity is MainActivity)
                 activity?.supportFragmentManager?.popBackStack()
             else

@@ -4,12 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.alexey.notes.Constants
 import com.alexey.notes.R
 import com.alexey.notes.about.AboutActivity
+import com.alexey.notes.background_tasks.BackupWorker
 import com.alexey.notes.databinding.FragmentNotesListBinding
 import com.alexey.notes.db.AppDataBase
 import com.alexey.notes.note.NotePagerActivity
@@ -19,6 +24,7 @@ import com.alexey.notes.notes_list.repository.NotesRepositoryImpl
 import com.alexey.notes.notes_list.view_model.NotesListViewModel
 import com.alexey.notes.notes_list.view_model.NotesListViewModelFactory
 import com.alexey.notes.notes_list.view_model.NotesListViewModelImpl
+import java.util.concurrent.TimeUnit
 
 /**
  * Вью для [NotesListViewModelImpl]
@@ -74,18 +80,20 @@ class NotesListFragment : Fragment(), NotesListView {
             this, NotesListViewModelFactory(NotesRepositoryImpl(dB))
         )[NotesListViewModelImpl::class.java]
 
+        viewModel.updateList()
         subscribeToViewModel()
 
-        viewModel.initList()
+        setupWorker()
 
-        adapter.setOnNoteClickListener { position ->
+        adapter.setOnNoteClickListener { id ->
             startActivity(Intent(activity, NotePagerActivity::class.java)
-                .putExtra(Constants.NOTE_POSITION, position))
+                .putExtra(Constants.NOTE_POSITION, id))
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_notes_menu, menu)
+        setupSearch(menu)
     }
 
     /**
@@ -101,34 +109,47 @@ class NotesListFragment : Fragment(), NotesListView {
         return true
     }
 
+    private fun setupSearch(menu: Menu) {
+        (menu.findItem(R.id.search)?.actionView as SearchView)
+            .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean = false
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    viewModel.updateListOnSearch(newText)
+                    return false
+                }
+            })
+    }
+
+    private fun setupWorker() {
+        WorkManager.getInstance(requireContext())
+            .enqueueUniquePeriodicWork(
+                BackupWorker.TAG,
+                ExistingPeriodicWorkPolicy.KEEP,
+                PeriodicWorkRequest
+                    .Builder(BackupWorker::class.java, 15, TimeUnit.MINUTES)
+                    .build()
+            )
+    }
+
     private fun subscribeToViewModel() {
-        viewModel.onAddNotesEvent.observe(this) {
-            for (note in it)
-                adapter.addNote(note)
-        }
-
         viewModel.onUpdateNotesEvent.observe(this) {
-            for (note in it)
-                adapter.updateNote(note)
+            adapter.submitList(it)
         }
 
-        viewModel.onDeleteNoteEvent.observe(this) {
-            adapter.deleteNote(it.id)
-        }
-
-        viewModel.onDownloadSuccessEvent.observe(this) {
+        viewModel.onDownloadSuccessEvent.observe(this) { _: Unit? ->
             Toast.makeText(activity, R.string.note_downloaded, Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.onDownloadFailedEvent.observe(this) {
+        viewModel.onDownloadFailedEvent.observe(this) { _: Unit? ->
             Toast.makeText(activity, R.string.note_download_failed, Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.onAboutBtnClickedEvent.observe(this) {
+        viewModel.onAboutBtnClickedEvent.observe(this) { _: Unit? ->
             openAboutScreen()
         }
 
-        viewModel.onAddNoteBtnClicked.observe(this) {
+        viewModel.onAddNoteBtnClicked.observe(this) { _: Unit? ->
             openNewNote()
         }
     }

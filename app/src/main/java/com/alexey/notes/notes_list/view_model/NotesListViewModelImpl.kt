@@ -21,35 +21,22 @@ class NotesListViewModelImpl(private val repository: NotesRepository) : ViewMode
     private lateinit var noteList: List<Note>
 
     /**
-     * Заполнение списка начальными данными
-     */
-    override fun initList() {
-        noteList = repository.loadData()
-        onAddNotesEvent.value = noteList
-    }
-
-    /**
      * Обновление списка
      */
     override fun updateList() {
-        val updatedList = repository.loadData()
+        noteList = repository.loadData()
+        onUpdateNotesEvent.value = noteList
+    }
 
-        //Проверка есть ли удаленные заметки
-        if (updatedList.size < noteList.size)
-            for ((i, note) in noteList.withIndex())
-                if (i == updatedList.size || note.id != updatedList[i].id) {
-                    onDeleteNoteEvent.value = note
-                    break
-                }
-
-        //Проверка есть ли обновленные или новые заметки
-        val updatedNotesList = ArrayList<Note>(0)
-        for (it in updatedList)
-            if (!noteList.contains(it))
-                updatedNotesList.add(it)
-        onUpdateNotesEvent.value = updatedNotesList
-
-        noteList = updatedList
+    /**
+     * Обновление списка при поиске
+     *
+     * @param searchText текст, введённый в строку поиска
+     */
+    override fun updateListOnSearch(searchText: String) {
+        onUpdateNotesEvent.value = noteList.filter {
+            it.title.contains(searchText) || it.text.contains(searchText)
+        }
     }
 
     /**
@@ -91,19 +78,9 @@ class NotesListViewModelImpl(private val repository: NotesRepository) : ViewMode
     }
 
     /**
-     * Добавление заметки в RecyclerView
-     */
-    override val onAddNotesEvent = SingleLiveEvent<List<Note>>()
-
-    /**
-     * Обновление заметки в RecyclerView
+     * Обновление списка в RecyclerView
      */
     override val onUpdateNotesEvent = SingleLiveEvent<List<Note>>()
-
-    /**
-     * Удаление заметки из RecyclerView
-     */
-    override val onDeleteNoteEvent = SingleLiveEvent<Note>()
 
     /**
      * Удалось скачать заметку

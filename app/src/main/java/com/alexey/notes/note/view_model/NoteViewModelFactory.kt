@@ -7,6 +7,6 @@ import com.alexey.notes.note.repository.NotesRepository
 class NoteViewModelFactory(private var repository: NotesRepository)
     : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
         NoteViewModelImpl(repository) as T
 }
