@@ -2,39 +2,65 @@ package com.alexey.notes.notes_list.view_model
 
 import androidx.lifecycle.ViewModel
 import com.alexey.notes.arch.SingleLiveEvent
+import com.alexey.notes.network.NoteInteractor
+import com.alexey.notes.notes_list.recycler.Note
 import com.alexey.notes.notes_list.repository.NotesRepository
 import com.alexey.notes.notes_list.view.NotesListView
-import com.alexey.notes.notes_list.recycler.Note
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * ViewModel для [NotesListView] и [NotesRepository]
  *
  * @param repository репозиторий к которому имеем доступ через интерфейс
  */
-class NotesListViewModelImpl(private val repository: NotesRepository)
-    : ViewModel(), NotesListViewModel {
+class NotesListViewModelImpl(private val repository: NotesRepository) : ViewModel(),
+    NotesListViewModel {
 
     private lateinit var noteList: List<Note>
-
-    /**
-     * Заполнение списка начальными данными
-     */
-    override fun initList() {
-        noteList = repository.loadData()
-        onAddNoteEvent.value = noteList
-    }
 
     /**
      * Обновление списка
      */
     override fun updateList() {
-        val updatedList = repository.loadData()
+        noteList = repository.loadData()
+        onUpdateNotesEvent.value = noteList
+    }
 
-        for (note in updatedList)
-            if (!noteList.contains(note))
-                onUpdateNoteEvent.value = note
+    /**
+     * Обновление списка при поиске
+     *
+     * @param searchText текст, введённый в строку поиска
+     */
+    override fun updateListOnSearch(searchText: String) {
+        onUpdateNotesEvent.value = noteList.filter {
+            it.title.contains(searchText) || it.text.contains(searchText)
+        }
+    }
 
-        noteList = updatedList
+    /**
+     * Обработка нажатия на кнопку "Скачать заметку"
+     */
+    override fun downloadBtnClicked() {
+        NoteInteractor().fetchNote().enqueue(object : Callback<Note> {
+            override fun onResponse(call: Call<Note>, response: Response<Note>) {
+                val title = response.body()?.title.orEmpty()
+                val text = response.body()?.text.orEmpty()
+
+                if (text.isEmpty() || title.isEmpty())
+                    onDownloadFailedEvent.call()
+                else {
+                    repository.addNote(title, text)
+                    updateList()
+                    onDownloadSuccessEvent.call()
+                }
+            }
+
+            override fun onFailure(call: Call<Note>, t: Throwable) {
+                onDownloadFailedEvent.call()
+            }
+        })
     }
 
     /**
@@ -52,14 +78,19 @@ class NotesListViewModelImpl(private val repository: NotesRepository)
     }
 
     /**
-     * Добавление заметки в RecyclerView
+     * Обновление списка в RecyclerView
      */
-    override val onAddNoteEvent = SingleLiveEvent<List<Note>>()
+    override val onUpdateNotesEvent = SingleLiveEvent<List<Note>>()
 
     /**
-     * Обновление заметки в RecyclerView
+     * Удалось скачать заметку
      */
-    override val onUpdateNoteEvent = SingleLiveEvent<Note>()
+    override val onDownloadSuccessEvent = SingleLiveEvent<Unit>()
+
+    /**
+     * Не удалось скачать заметку
+     */
+    override val onDownloadFailedEvent = SingleLiveEvent<Unit>()
 
     /**
      * Нажатие на кнопку "О приложении"

@@ -36,6 +36,9 @@ class NoteFragment : Fragment(), NoteView {
                 dB = dataBase
             }
         }
+
+        const val ACTION = "com.alexey.notes.action_saving"
+        const val NOTE_INFO = "note_info"
     }
 
     private lateinit var binding: FragmentNoteBinding
@@ -53,8 +56,8 @@ class NoteFragment : Fragment(), NoteView {
 
         subscribeToViewModel()
 
-        (activity as HomeButtonSupport).showHomeButton()
         setHasOptionsMenu(true)
+        (activity as HomeButtonSupport).showHomeButton()
     }
 
     override fun onCreateView(
@@ -68,22 +71,13 @@ class NoteFragment : Fragment(), NoteView {
             container,
             false
         ).also {
+            arguments?.getLong(Constants.ARG_NOTE_ID).let {
+                viewModel.init(it ?: 0L)
+            }
+
             it.viewModel = this.viewModel
             binding = it
         }.root
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        arguments?.getLong(Constants.ARG_NOTE_ID).apply {
-            viewModel.init(this ?: 0L)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        (activity as HomeButtonSupport).hideHomeButton()
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
@@ -102,6 +96,7 @@ class NoteFragment : Fragment(), NoteView {
             R.id.note_save -> {
                 DialogSaveNoteFragment().show(childFragmentManager, "save")
             }
+            R.id.note_delete -> viewModel.deleteBtnClicked()
         }
         return true
     }
@@ -118,13 +113,17 @@ class NoteFragment : Fragment(), NoteView {
     private fun subscribeToViewModel() {
         viewModel.onSaveSuccessEvent.observe(this) {
             showToast(R.string.note_saved)
+            activity?.sendBroadcast(Intent().apply {
+                action = ACTION
+                putExtra(NOTE_INFO, "id: ${it.id} title: ${it.title}")
+            })
         }
 
-        viewModel.onSaveFailedEvent.observe(this) {
+        viewModel.onSaveFailedEvent.observe(this) { _: Unit? ->
             showToast(R.string.note_save_failed)
         }
 
-        viewModel.onAttemptSaveEmptyContent.observe(this) {
+        viewModel.onAttemptSaveEmptyContent.observe(this) { _: Unit? ->
             showToast(R.string.note_empty_save)
         }
 
@@ -133,16 +132,27 @@ class NoteFragment : Fragment(), NoteView {
             shareNote(it.title, it.text)
         }
 
-        viewModel.onAttemptShareEmptyContent.observe(this) {
+        viewModel.onAttemptShareEmptyContent.observe(this) { _: Unit? ->
             showToast(R.string.note_empty_share)
         }
 
 
-        viewModel.onBackEvent.observe(this) {
+        viewModel.onDeleteSuccessEvent.observe(this) { _: Unit? ->
+            showToast(R.string.note_deleted)
+        }
+
+        viewModel.onDeleteFailedEvent.observe(this) { _: Unit? ->
+            showToast(R.string.note_delete_failed)
+        }
+
+
+        viewModel.onBackEvent.observe(this) {  _: Unit? ->
             if (activity is MainActivity)
                 activity?.supportFragmentManager?.popBackStack()
             else
                 activity?.finish()
+
+            (activity as HomeButtonSupport).hideHomeButton()
         }
     }
 

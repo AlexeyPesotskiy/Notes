@@ -19,7 +19,7 @@ class NoteViewModelImplTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val repository = mock(NotesRepository::class.java)
-    private var viewModel = NoteViewModelImpl(repository)
+    private val viewModel = NoteViewModelImpl(repository)
 
     @Test
     fun tryToSaveEmptyNote() {

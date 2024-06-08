@@ -26,7 +26,10 @@ class NotePagerActivity : AppCompatActivity(), HomeButtonSupport {
 
         binding.viewPager.apply {
             adapter = pagerAdapter
-            setCurrentItem(intent.getIntExtra(Constants.NOTE_POSITION, 0), false)
+
+            setCurrentItem(pagerAdapter.items.indexOfFirst {
+                it.id == intent.getLongExtra(Constants.NOTE_POSITION, 0L)
+            }, false)
         }
     }
 

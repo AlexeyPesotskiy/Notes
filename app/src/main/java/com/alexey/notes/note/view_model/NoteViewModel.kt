@@ -12,14 +12,18 @@ interface NoteViewModel {
 
     fun save()
     fun shareBtnClicked()
+    fun deleteBtnClicked()
     fun backBtnClicked()
 
-    val onSaveSuccessEvent: SingleLiveEvent<Unit>
+    val onSaveSuccessEvent: SingleLiveEvent<Note>
     val onAttemptSaveEmptyContent: SingleLiveEvent<Unit>
     val onSaveFailedEvent: SingleLiveEvent<Unit>
 
     val onShareEvent: SingleLiveEvent<Note>
     val onAttemptShareEmptyContent: SingleLiveEvent<Unit>
+
+    val onDeleteSuccessEvent: SingleLiveEvent<Unit>
+    val onDeleteFailedEvent: SingleLiveEvent<Unit>
 
     val onBackEvent: SingleLiveEvent<Unit>
 }

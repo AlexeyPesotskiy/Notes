@@ -5,17 +5,17 @@ import com.alexey.notes.notes_list.recycler.Note
 
 interface NotesListViewModel {
 
-    fun initList()
     fun updateList()
+    fun updateListOnSearch(searchText: String)
 
+    fun downloadBtnClicked()
     fun aboutBtnClicked()
     fun addNoteBtnClicked()
 
-    val onAddNoteEvent: SingleLiveEvent<List<Note>>
+    val onUpdateNotesEvent: SingleLiveEvent<List<Note>>
 
-    val onUpdateNoteEvent: SingleLiveEvent<Note>
-
+    val onDownloadSuccessEvent: SingleLiveEvent<Unit>
+    val onDownloadFailedEvent: SingleLiveEvent<Unit>
     val onAboutBtnClickedEvent: SingleLiveEvent<Unit>
-
     val onAddNoteBtnClicked: SingleLiveEvent<Unit>
 }

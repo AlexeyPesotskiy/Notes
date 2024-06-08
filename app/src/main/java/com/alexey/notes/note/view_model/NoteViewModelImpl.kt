@@ -13,7 +13,7 @@ import com.alexey.notes.notes_list.recycler.Note
  */
 class NoteViewModelImpl(private val repository: NotesRepository) : ViewModel(), NoteViewModel {
 
-    var id: Long = 0
+    var id = 0L
     override var title = ""
     override var text = ""
 
@@ -40,9 +40,10 @@ class NoteViewModelImpl(private val repository: NotesRepository) : ViewModel(), 
             title.isEmpty() || text.isEmpty() -> onAttemptSaveEmptyContent.call()
             id == 0L -> {
                 id = repository.addNote(title, text)
-                onSaveSuccessEvent.call()
+                onSaveSuccessEvent.value = Note(id, title, text)
             }
-            repository.updateNote(id, title, text) -> onSaveSuccessEvent.call()
+            repository.updateNote(id, title, text) ->
+                onSaveSuccessEvent.value = Note(id, title, text)
             else -> onSaveFailedEvent.call()
         }
     }
@@ -58,6 +59,18 @@ class NoteViewModelImpl(private val repository: NotesRepository) : ViewModel(), 
     }
 
     /**
+     * Обработка нажатия на кнопку "Удалить"
+     */
+    override fun deleteBtnClicked() {
+        if (id > 0L) {
+            repository.deleteNote(id)
+            onDeleteSuccessEvent.call()
+        } else
+            onDeleteFailedEvent.call()
+        onBackEvent.call()
+    }
+
+    /**
      * Обработка нажатия на кнопку "Назад"
      */
     override fun backBtnClicked() {
@@ -67,7 +80,7 @@ class NoteViewModelImpl(private val repository: NotesRepository) : ViewModel(), 
     /**
      * Удалось сохранить заметку
      */
-    override val onSaveSuccessEvent = SingleLiveEvent<Unit>()
+    override val onSaveSuccessEvent = SingleLiveEvent<Note>()
 
     /**
      * Попытка сохранить пустую заметку
@@ -89,6 +102,17 @@ class NoteViewModelImpl(private val repository: NotesRepository) : ViewModel(), 
      * Попытка поделиться пустой заметкой
      */
     override val onAttemptShareEmptyContent = SingleLiveEvent<Unit>()
+
+
+    /**
+     * Удалось удалить заметку
+     */
+    override val onDeleteSuccessEvent = SingleLiveEvent<Unit>()
+
+    /**
+     * Не удалось удалить заметку
+     */
+    override val onDeleteFailedEvent = SingleLiveEvent<Unit>()
 
 
     /**
